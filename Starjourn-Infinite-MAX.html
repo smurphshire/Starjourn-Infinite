@@ -1,0 +1,2591 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>STARJOURN INFINITE GAME</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    user-select:none;
+}
+
+body {
+    margin: 0;
+    background: #222;
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden; /* Stops browser scrolling */
+    box-sizing: border-box;
+}
+
+/* Custom Dark Look Scrollbar Engines */
+html, * {
+    scrollbar-color: #555555 #1e1e1e;
+    scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1e1e1e; 
+}
+
+::-webkit-scrollbar-thumb {
+    background: #555555; 
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #777777; 
+}
+
+/* BOARD FRAME - board image inset, div below*/
+#boardWrap {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    box-sizing: border-box;
+    position: relative;
+    padding-left: 0px; 
+    padding-right: 265px; 
+    overflow: hidden;
+}
+
+#boardAndHeader {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Aligns content from the top so it doesn't overflow out of view */
+    height: 100vh;
+    
+    /* Allows this middle area to scroll horizontally and vertically */
+    overflow: auto;  
+    padding: 20px;               /* Adds frame around map */
+    box-sizing: border-box;
+}
+
+#sidebar {
+    width: 265px;
+    min-width: 265px;
+    background: #101010;
+    padding: 18px;
+    padding-left: 35px;
+    overflow-y: auto;
+    border-right: 2px solid #444;
+    height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-icon {
+    width: 180px;
+    height: 45px;
+    object-fit: contain;
+    justify-self: center;
+}
+
+.descript {
+    width: 100%;
+    max-height: 240px;
+    overflow-y: auto;
+    padding: 10px;
+
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 12px;
+    text-transform: none;
+    color: #a9a69c;
+       mask-image:
+        linear-gradient(
+            to bottom,
+            black 92%,
+            transparent 100%
+        );
+}
+
+
+
+#board-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #525252;
+    text-align: center;        
+    text-transform: uppercase; 
+    margin-top: 5px;
+    margin-bottom: 0px;        
+    padding-bottom: 8px;      
+}
+
+
+/*//////////////
+/////////////// Board div below sets starmap size.   */
+
+
+#board {
+    position: relative;
+    width: 1085px;               /* Restores absolute fixed width layout grid board imagesize*/ 
+    height: 775px;               /* Restores absolute fixed height layout */
+    background-image: url("");
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #555;
+    max-width: none; 
+    max-height: none; 
+    object-fit: fill;            /* Keeps background tracking stable */
+    flex-shrink: 0;              /* Prevents sidebars from shrinking the grid */
+}
+
+
+#eventPanel {
+    position: fixed;             
+    top: 0;
+    right: 0;                    
+    z-index: 9999;               
+    width: 265px;
+    height: 100vh;               
+    background: #101010;
+    padding: 18px;
+    padding-right: 35px;         
+    border-left: 2px solid #444;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;      
+    gap: 15px;
+}
+
+.sidebar-title {
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #ccc;                 
+    text-transform: uppercase;
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
+#eventImage {
+    width: 180px;                
+    height: auto;
+    max-height: 180px;
+    object-fit: contain;
+    cursor: pointer;
+    align-self: center;          
+    border: 2px solid #666;
+    flex-shrink: 0;              
+}
+
+/* changes to scroll if crushed */
+#eventTextWrapper {
+    flex: 1;                     
+    min-height: 0;               
+    overflow-y: auto;            /* Becomes scrollable if screen gets too short */
+    padding-right: 5px;   
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black 92%,
+            transparent 100%
+        );       
+}
+
+#eventText {
+    color: #eee;                 
+    font-size: 18px;             
+    line-height: 1.3;            
+    width: 100%;
+    word-break: break-word;      
+}
+
+/* Event Title */
+evt-title{
+    display:block;
+    font-size:22px;
+    font-weight:700;
+    text-transform:uppercase;
+    color:#ffffff;
+   
+    line-height:1.15;
+    margin-bottom:16px;
+}
+
+/* Main Effect Text */
+evt-effect{
+    display:block;
+    font-size:20px;
+    line-height:1.4;
+    color:#c8c8c8;
+    margin-bottom:20px;
+}
+
+/* Highlighted Rules Text */
+evt-hot{
+    color:#efefef;
+    font-weight:600;
+    font-size:1.08em;
+}
+
+/* Flavor Text */
+evt-lore{
+    display:block;
+    font-size:15px;
+    line-height:1.3;
+    color:#818181;
+    font-style:italic;
+    letter-spacing:0.5px;
+    padding-top: 22px;
+        border-top: 1px solid #222;  
+
+}
+
+/* Version Footer */
+#eventFooter {
+    flex-shrink: 0;              
+    padding-top: 10px;
+    border-top: 1px solid #222;  
+    font-size: 10px;
+    color: #525252;
+    margin-bottom: 5px;
+}
+
+
+.section {
+    margin-bottom: 16px;
+}
+
+.section h3, 
+.section-headline {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #ccc;
+}
+
+
+
+
+
+.h4 {
+    font-size: 24px;
+    text-transform: uppercase;
+    color: #ccc;
+}
+
+
+.tinyText { 
+    
+    font-size: 12px;
+    color: #525252;
+    margin-bottom: 5px;
+}
+
+.reserve {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    width: 142px;
+}
+
+#turnCounter {
+    font-size: 72px;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+}
+
+.token {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+        font-size: 22px;
+    will-change: transform;
+    transition: left 0.18s cubic-bezier(0.25, 1, 0.5, 1), top 0.18s cubic-bezier(0.25, 1, 0.5, 1);
+    cursor: grab;
+}
+
+.shipIcon {
+    width: 32px;                  
+    height: 32px;                 
+    background-image: url('your-icon-path.png'); 
+    background-size: contain;     
+    background-repeat: no-repeat; 
+    background-position: center;  
+    background-color: transparent; 
+    border: none; 
+}
+
+.player {
+    background: #de2840a9;
+    border: 3.5px solid #ff6c7f;
+    transition: left 0.18s cubic-bezier(0.25, 1, 0.5, 1), top 0.18s cubic-bezier(0.25, 1, 0.5, 1);
+    color: #ffffff;
+    
+}
+
+.player2 {
+    background: #3cb91aac;
+    border: 3.5px solid #77d95c;
+    transition: left 0.18s cubic-bezier(0.25, 1, 0.5, 1), top 0.18s cubic-bezier(0.25, 1, 0.5, 1);
+    color: #ffffff;
+}
+
+.hindered {
+    filter: grayscale(45%) brightness(70%);
+    opacity: .9;
+}
+
+.gold {
+    background: rgba(250, 229, 108, 0.601);
+    color: #000000;
+    border: 3px solid #f9ef95;
+    transition: left 0.18s cubic-bezier(0.25, 1, 0.5, 1), top 0.18s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.token.gold {
+    transform: translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px)) scale(0.75); 
+}
+
+.diceRow {
+    display: flex;
+    gap: 10px;
+}
+
+.d6 {
+    width: 35px;
+    height: 35px;
+    background: white;
+    color: black;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.d20a, .d20b {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: ns-resize;
+    z-index: 1;
+}
+
+.d20a { color: #ffffff; }
+.d20b { color: #000000; }
+
+.d20a::before, .d20b::before {
+    content: "";
+    position: absolute;
+    top: 2px;    
+    left: 2px;   
+    right: 2px;  
+    bottom: 2px; 
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    z-index: -1;
+}
+
+.d20a::after, .d20b::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background: #555555; 
+    z-index: -2;
+}
+
+.d20a::before { background: #000000; }
+.d20b::before { background: #ffffff; }
+
+.copyFoot {
+    color: rgb(121, 121, 121);
+    font-family: Arial, sans-serif;
+    font-size: 9px;
+    width: 100%;
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    white-space: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: center;
+}
+
+
+
+#boardSelector{
+
+    text-align:center;
+    width:100%;
+    height:28px;
+    background:#5a5a5a;
+    color:#fff;
+    border:1px solid #444;
+    padding:5px;
+    font-size:12px;
+    font-family:inherit;
+    outline:none;
+    box-sizing:border-box;
+    appearance:none;
+}
+
+#boardSelector option{
+
+    background:#5a5a5a;
+    color:#fff;
+}
+
+
+button {
+    width: 100%;
+    padding: 5px;
+    font-size: 12px;
+    cursor: pointer;
+
+height: 30px;
+
+
+    background-color: #555555; /* Medium dark gray background */
+    color: #c6c6c6;            /* Crisp white text */
+    border: 1px solid #444444; /* Optional: smooth out the border */
+
+}
+
+
+.dragging{
+    z-index:9999;
+        transition: none !important; 
+
+}
+
+#d6ModifierDisplay{
+    margin-top:10px;
+    margin-bottom: 12px;
+    font-size:15px;
+    font-style: italic;
+    color:#b4b4b4;
+}
+
+
+
+
+
+
+.starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #040406; /* Deep cosmic dark background */
+  z-index: -1;
+  overflow: hidden;
+
+  background-image: 
+    /* LAYER 1: Deep space soft nebula clouds */
+    radial-gradient(ellipse 35% 25% at 200px 220px, rgba(134, 55, 137, 0.11), transparent),
+    radial-gradient(ellipse 40% 40% at 380px 350px, rgba(38, 43, 107, 0.14), transparent),
+    radial-gradient(ellipse 30% 20% at 220px 150px, rgba(16, 49, 54, 0.1), transparent),
+    radial-gradient(ellipse 45% 45% at 280px 270px, rgba(38, 86, 107, 0.12), transparent),
+   
+    /* LAYER 2: Fine background space dust / Tiny stars */
+    radial-gradient(1px 1px at 70px 80px, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(2px 2px at 140px 420px, rgba(135, 206, 250, 0.75), transparent), 
+    radial-gradient(1.5px 1.5px at 280px 140px, rgba(255, 223, 137, 0.7), transparent),
+
+    /* LAYER 3: Medium and prominent white stars */
+    radial-gradient(3px 3px at 450px 250px, #ffffff, transparent),
+    radial-gradient(4.5px 4.5px at 180px 450px, rgba(255, 255, 255, 0.95), transparent),
+
+    /* LAYER 4: Asteroid Cluster / Debris field */
+    radial-gradient(2px 2px at 320px 280px, #d5d5d5, transparent),
+    radial-gradient(3px 4px at 330px 270px, #6e6e6e, transparent),
+    radial-gradient(5px 2px at 360px 210px, #525252, transparent),
+    radial-gradient(4px 3px at 370px 130px, #a19e9e, transparent),
+    radial-gradient(2px 2px at 350px 240px, #ffffff, transparent),
+    radial-gradient(1.5px 2px at 345px 295px, #9c9c9c, transparent);
+  
+  background-size: 550px 550px; 
+  animation: flySpaceClean 120s linear infinite;
+}
+
+
+.starfield::before,
+.starfield::after {
+  content: "";
+  position: absolute;
+  height: 3px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(0, 191, 255, 0.5) 25%, transparent 100%);
+  filter: drop-shadow(0 0 4px rgba(135, 206, 250, 0.6));
+  opacity: 0;
+  pointer-events: none;
+}
+
+.starfield::before {
+  top: -5%;
+  right: 15%;
+  width: 110px;
+  transform: rotate(-45deg); 
+  animation: rareCometOne 10s ease-in infinite;
+  animation-delay: 3s;
+}
+
+.starfield::after {
+  top: 15%;
+  right: -5%;
+  width: 140px;
+  transform: rotate(-45deg); 
+  animation: rareCometTwo 20s ease-in infinite;
+  animation-delay: 12s;
+}
+
+
+@keyframes flySpaceClean {
+  from {
+    background-position: 
+      0px 0px, 0px 0px, 0px 0px, 0px 0px,
+      0px 0px, 0px 0px, 0px 0px,
+      0px 0px, 0px 0px,
+      0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px;
+  }
+  to {
+    background-position: 
+      -550px -550px, -550px -550px, -550px -550px, -550px -550px,
+      -1100px -550px, -1100px -550px, -1100px -550px,
+      -1650px -550px, -1650px -550px,
+      -2200px -550px, -2200px -550px, -2200px -550px, -2200px -550px, -2200px -550px, -2200px -550px;
+  }
+}
+
+@keyframes rareCometOne {
+  0% {
+    transform: translate(0, 0) rotate(-45deg);
+    opacity: 0;
+  }
+  1% {
+    opacity: 1;
+  }
+  25%, 100% {
+    transform: translate(-130vw, 130vh) rotate(-45deg);
+    opacity: 0;
+  }
+}
+
+@keyframes rareCometTwo {
+  0% {
+    transform: translate(0, 0) rotate(-45deg);
+    opacity: 0;
+  }
+  1% {
+    opacity: 1;
+  }
+  25%, 100% {
+    transform: translate(-150vw, 150vh) rotate(-45deg);
+    opacity: 0;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+    .app{display:flex;height:100%}
+    .main{flex:1;display:flex;align-items:center;justify-content:center;padding:8px}
+    svg{width:100%;height:100%;display:block}
+    label{display:block;margin:8px 0;font-size:13px}
+    input[type=number],input[type=text],select{width:100%}
+    .row{display:flex;gap:8px}
+    .muted{color:#9aa}
+    .control{margin-bottom:8px}
+</style>
+
+    <link rel="icon" type="image/png" href="./Resources/icon.png">  
+</head>
+
+<body>
+<div class="starfield"></div>
+
+
+
+
+<div id="sidebar">
+    <div class="section">
+
+
+    <img src="./Resources/Event__LogoHead1.png" alt="Logo" class="sidebar-icon">
+
+
+        <h3>Player</h3>
+        <div class="reserve" id="playerReserve">
+            <div class="token player" id="playerToken"><b>P1</b></div>
+            <div class="token player2" id="playerToken2"><b>P2</b></div> <!-- Added Player 2 -->
+        </div>
+    </div>
+
+
+
+    <div class="section">
+        <h3>Civilization Tokens
+
+
+
+
+
+
+        </h3>
+        <div class="reserve" id="goldReserve"></div>
+    </div>
+
+    <div class="section">
+        <h3>D6 Fuel Points 
+
+        </h3>
+
+
+
+
+ <div id="d6ModifierDisplay">
+            Modifier: 0
+        </div>
+
+
+
+        <div class="diceRow">  
+
+            <div class="d6" id="d6a">1</div>
+
+            <div style="font-size:24px;align-self:center;">
+                +
+            </div>
+
+            <div class="d6" id="d6b">1</div>
+
+            <div style="font-size:24px;align-self:center;">
+                =
+            </div>
+
+            <div class="d6" id="d6Total">
+                2
+            </div>
+
+        </div>
+
+       
+    </div>
+
+    <div class="section">
+        <h3>D20 Resource Points 
+
+
+
+
+
+        </h3>
+
+        <div class="diceRow">
+            <div class="d20a" id="d20a">3</div>
+            <div class="d20b" id="d20b">0</div>
+        </div>
+    </div>
+
+
+<div class="section">
+
+       
+<div class="tinyText"><i>Select Game Board Below</i></div>
+<select id="boardSelector">
+    <option value="">Select Board...</option>
+</select>
+
+
+
+
+    <button id="randomBoardBtn">
+        Load Random Board
+    </button>
+
+        <button id="generate">Generate</button>
+
+
+
+
+    <button id="resetBtn">
+• Reset Game • 
+    </button>
+
+
+</div>
+
+
+
+
+<div class="descript" id="descript">
+    <h3 class="section-headline">How to Play</h3>
+        
+   
+        
+            - To begin, drag your Player Token chip to the middle location or a location of your choosing.  <br><br>  
+
+            - A standard game will have the player start with 3 Resource Points (RP) assigned to their Life Support (Black D20).  <br><br>  
+
+            - The Standard Player Ability is if both D6 are 1s, your Fuel Points becomes 12.  <br><br>  
+
+            - CONTROLS: Drag the Player Tokens and Civilization Tokens, Click Event Icon to Roll D6 and Advance Turns, D20s Increase with Left Clicks and Decrease with Right Clicks or use the scroll wheel up and down  (Left Click each D6 individually to manually reroll if needed).  <br><br> 
+            
+            - Use the buttons below the trackers to select boards, roll a new board, or reset the game.  <br><br>  
+
+            - Click the Event Icon image on the right to initiate a new turn or start the game. <br><br>
+
+            - Your D6 Fuel Points (FP) value is your available Fuel for this turn.  <br><br>    
+
+             - Each turn, resolve the Event's impact: Resource Points must be managed by the Player, Most D6 calculations are done automatically (Event Modifier). <br><br>
+             
+             - The Player can sometimes become "hindered" from events, Player token becomes translucent in this state.  <br><br>    
+
+            - To move, your Fuel Points must meet or exceed the crossing edge value of the TARGET location you intend to move onto.  <br><br>
+
+            - If your Fuel Points roll is succesful, then drag the Player Token chip to the new location.  <br><br>  
+
+            - When you cross onto the target location you gain the + value (Blue) points into your Resource Points.  You choose if it goes to Life Support (Black D20) or your Cargo (White D20)  <br><br>    
+
+            * Must go to three other locations before you can recollect Resources from a location.  <br><br>
+
+            * Negative Event impacts effect Life Support RP always unless otherwise stated in the event description.    <br><br>
+
+            * The player must manually monitor Resource Points and account for effects from Events.    <br><br>
+
+            - If you are unable to make a move to a new location, you are stranded, then you must lose the - value (Orange) and re-roll a new turn.  <br><br>  
+
+            - Losing all Life Support RP (Black D20) results in a game over!  <br><br>
+            - Manage how you store your collected Resources wisely.<br><br>
+            - Resources can only be assigned when first collected, Cargo cannot be used for Life Support Resources after it has been stored.  <br><br>  
+
+
+            - Planet locations may have Civilizations marked with Yellow Star Icons, up to 3 levels, the goal is to claim your own uncharted world.  <br><br>  
+
+            - Use 10 Cargo Resource Points to deposit a "C" Civilization Token chip on a planet location that DOES NOT already have a Civilization.  <br><br>
+
+             * When you recollect resources from a world you have a civilization on, you gain +1 Resource Point for each token.  <br><br>
+
+            - Gather more Cargo Resources to upgrade a single Planet's Civilization to Level 3 using the token chips. <br><br>    
+
+            - Colonize and upgrade 2 uncharted worlds to level 3 in solo play to win the game! <br><br>    
+
+             - Explore and build up your frontier worlds! <br><br>    
+
+          
+
+            - - Advanced Player Ability: Move diagonally by averaging the two adjacent values on the target card.  <br><br>    
+
+            - - Balance how you divide your Resource Points and plan your journey so you don't get stranded!  <br><br>  
+
+             - - Two players can play by racing to build their outposts: use shared Fuel Points, track RP and Cargo physically and separate, Build your own civilizations- first to Lvl 3 wins! <br><br> 
+             
+              <style>
+  .gold-link {
+    color: #FFD700;
+    text-decoration: none;
+  }
+  .gold-link:hover {
+    color: #89CFF0;
+  }
+</style>
+
+VISIT <a href="https://starjourn.net" class="gold-link">STARJOURN.NET</a> <br>
+FOR MORE INFO
+<br><br>    
+
+
+    
+
+
+        </div>
+    </div>
+</div>
+
+
+</div>
+
+<div id="boardWrap">
+    <div id="boardAndHeader">
+        <div id="board-name">Targeting Sector...</div>
+        <div id="board">
+            <!-- Added viewBox="0 0 800 450" to give your canvas a clear grid system -->
+            <svg id="canvas" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid meet" xmlns="http://w3.org"></svg>
+        </div>
+    </div>
+</div>
+
+
+    <div id="eventPanel">
+        
+        <div class="sidebar-title">EVENTS</div>
+
+        <img id="eventImage"
+             src="./Resources/Event__LogoStart.png"
+             alt="Event">
+
+        <div id="eventTextWrapper">
+            <div id="eventText">
+                <b>STARJOURN : INFINITE</b>
+                <br><br>
+                Click the icon above to start the game, repeat to advance each turn and auto roll for Fuel Points.
+                <br><br>     
+                <evt-lore><i>
+                - Use the tokens along with dice counters to the left to play the game.
+                <br><br>
+                - Check the How to Play in the bottom left, also visit Starjourn.net for more info on rules and additional ways to play and enjoy Starjourn!
+                </i></evt-lore>
+            </div>
+        </div>
+
+
+
+
+<div class="section">
+
+    
+ <h3>Turn</h3>
+    <div id="turnCounter">
+       0
+        
+    </div>
+
+   <div class="section">
+        <br>
+
+
+
+        <div id="eventFooter">
+            STARJOURN © SPM 2026 • v1.2.1
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+// -------------------- GRID RATIO
+const GRID_X = 7;
+const GRID_Y = 5;
+
+
+
+const board = document.getElementById("board");
+
+const state = {
+    tokens:{},
+
+    currentBoard:0,
+
+    d6a:1,
+    d6b:1,
+
+    d20a:3,
+    d20b:0,
+
+    d6Modifier:0,
+    d20Modifier:0,
+    turn:0,
+    hindered:false,
+
+    currentEvent:null,  
+    eventBag:[]
+};
+
+
+
+
+
+function randomizeBoard(){
+
+    const index =
+        Math.floor(
+            Math.random() *
+            BOARDS.length
+        );
+
+    loadBoard(index);
+
+    document.getElementById("boardSelector").value = index;
+}
+
+
+function updateTurnCounter(){
+
+    document.getElementById(
+        "turnCounter"
+    ).textContent = state.turn;
+}
+
+
+function saveState(){
+    localStorage.setItem(
+        "boardTrackerState",
+        JSON.stringify(state)
+    );
+}
+
+function loadState(){
+
+    const saved =
+        localStorage.getItem("boardTrackerState");
+
+    if(saved){
+
+        Object.assign(
+            state,
+            JSON.parse(saved)
+        );
+    }
+}
+
+for(let i=1;i<=6;i++){ // how many gold C Tokens
+
+    const chip =
+        document.createElement("div");
+
+    chip.className =
+        "token gold";
+
+    chip.id =
+        "gold"+i;
+
+    chip.textContent =
+        "C";
+
+    document
+        .getElementById("goldReserve")
+        .appendChild(chip);
+}
+
+function makeDraggable(el){
+
+    let dragging=false;
+    let offsetX=0;
+    let offsetY=0;
+
+el.addEventListener("pointerdown", e => {
+
+    dragging = true;
+
+    const r = el.getBoundingClientRect();
+
+    offsetX = e.clientX - r.left;
+    offsetY = e.clientY - r.top;
+
+    el.classList.add("dragging");
+    el.style.position = "fixed";
+    el.style.left = r.left + "px";
+    el.style.top = r.top + "px";
+
+    requestAnimationFrame(() => {
+        document.body.appendChild(el);
+    });
+
+});
+
+    window.addEventListener("pointermove",e=>{
+
+        if(!dragging) return;
+
+        el.style.left =
+            (e.clientX-offsetX)+"px";
+
+        el.style.top =
+            (e.clientY-offsetY)+"px";
+
+    });
+
+    window.addEventListener("pointerup", e => {
+    if (!dragging) return;
+    dragging = false;
+
+    const br = board.getBoundingClientRect();
+
+    if (
+        e.clientX >= br.left &&
+        e.clientX <= br.right &&
+        e.clientY >= br.top &&
+        e.clientY <= br.bottom
+    ) {
+        const tokenRect = el.getBoundingClientRect();
+        const tokenCenterX = tokenRect.left + tokenRect.width / 2;
+        const tokenCenterY = tokenRect.top + tokenRect.height / 2;
+
+        let x = tokenCenterX - br.left;
+        let y = tokenCenterY - br.top;
+
+        x = Math.round(x / GRID_X) * GRID_X;
+        y = Math.round(y / GRID_Y) * GRID_Y;
+
+        x = x - tokenRect.width / 2;
+        y = y - tokenRect.height / 2;
+
+       
+        // . Safely re-enable everything on the next formal display refresh cycle
+        requestAnimationFrame(() => {
+            el.classList.remove("dragging");
+            el.style.opacity = "";
+            el.style.visibility = "";
+        });
+
+        state.tokens[el.id] = { x: x, y: y }; /// here we're setting tokens ----
+
+//////. This chunk causes the flicker, but holds the posiition
+
+        board.appendChild(el);
+
+        el.style.position = "absolute";
+        el.style.left = x + "px";   el.style.top = y + "px";
+
+//////
+
+    } else {
+        // Handle return to reserves smoothly without jumps
+        el.style.opacity = "0";
+        el.style.visibility = "hidden";
+        
+        el.classList.remove("dragging");
+
+    if (el.id.startsWith("playerToken")) { 
+        document.getElementById("playerReserve").appendChild(el);
+    } else {
+        document.getElementById("goldReserve").appendChild(el);
+    }
+
+        el.style.position = "";
+        el.style.left = "";
+        el.style.top = "";
+
+        void el.offsetHeight;
+
+        requestAnimationFrame(() => {
+            el.style.opacity = "";
+            el.style.visibility = "";
+        });
+
+        delete state.tokens[el.id];
+    }
+
+    saveState();
+});
+
+}
+
+
+const BOARDS = [
+    "./Resources/Board1.png",  "./Resources/Board2.png",  "./Resources/Board3.png",
+    "./Resources/Board4.png",  "./Resources/Board5.png",  "./Resources/Board6.png",
+    "./Resources/Board7.png",  "./Resources/Board8.png",  "./Resources/Board9.png",
+    "./Resources/Board10.png", "./Resources/Board11.png", "./Resources/BoardClassic.png",
+    "GENERATED" // 
+];
+
+const BOARD_NAMES = {
+    0: "- Infinite Outset - ",   1: "- Atlas Omega Sector -",     2: "- Mokosh Sector -",
+    3: "- Farliax Trade Empire -",     4: "- Lemuria Sector -",      5: "- Marzett Sector -",
+    6: "- Caelus Sector -",  7: "- The Lacideon Expanse -",    8: "- Rom Theta Sector -",
+    9: "- The Outer Rim -",   10: "- Worlds Beyond -",   11: "- Starjourn Classic -",
+    12: "- Uncharted Space -" // 
+};
+
+
+const boardSelector =
+    document.getElementById("boardSelector");
+
+for (let i = 0; i < BOARDS.length; i++) {
+
+    const option =
+        document.createElement("option");
+
+    option.value = i;
+    option.textContent =
+        BOARD_NAMES[i] || `Board ${i + 1}`;
+
+    boardSelector.appendChild(option);
+}
+
+boardSelector.addEventListener("change", function(){
+
+    const index = parseInt(this.value);
+
+    if(!isNaN(index)){
+        loadBoard(index);
+    }
+
+});
+
+
+function loadBoard(index) {
+
+    state.currentBoard = index;
+
+    const boardElement = document.getElementById("board");
+    const canvasSvg = document.getElementById("canvas");
+
+    if (BOARDS[index] === "GENERATED") {
+
+    // Remove static board image
+    boardElement.style.backgroundImage = "none";
+
+    // Show generated SVG
+    canvasSvg.style.display = "block";
+
+    // Restore saved custom SVG if one exists
+    const savedSVG = localStorage.getItem("customBoardSVG");
+
+    if (savedSVG) {
+        canvasSvg.outerHTML = savedSVG;
+    } else {
+        // No saved SVG yet — generate one
+        generateStarjournMap();
+    }
+
+} else {
+        // Hide generated SVG
+        canvasSvg.style.display = "none";
+
+        // Show static board
+        boardElement.style.backgroundImage =
+            'url("' + BOARDS[index] + '")';
+    }
+
+    document.getElementById("board-name").textContent =
+        BOARD_NAMES[index];
+
+    document.getElementById("boardSelector").value =
+        index;
+
+    saveState();
+}
+
+// Fixed visual generator function using clear coordinate targets
+function generateStarjournMap() {
+
+    const settings = {
+
+        // Main map
+        count: 35,
+        columns: 7,
+        scale: 100,
+
+        // Board/grid
+        doGrid: true,
+        doBG: true,
+
+        // Planet features
+        land: true,
+        city: true,
+        poles: true,
+        mountains: true,
+        clouds: true,
+        moons: true,
+        asteroids: true,
+        rings: true,
+        shadow: true,
+
+        // Space features
+        doStars: true,
+        starCount: 1200,
+
+        doFields: true,
+        fields: 22,
+
+        doNebula: true,
+        nebula: 20,
+
+        doGas: true,
+        gas: 5,
+
+        doBlackHoles: true,
+        blackholes: 3
+    };
+
+    runOnce(settings);
+}
+
+
+
+
+const EVENTS = [
+
+
+
+
+{
+    image:"./Resources/Event_AsteroidBelt.png",
+
+    text:`
+    <evt-title>Space Detour</evt-title>
+
+    <evt-effect>
+    Lose <evt-hot>-3 Fuel Points</evt-hot> this turn.
+    </evt-effect>
+
+    <evt-lore>
+    This asteroid belt makes traveling fast a challenge,
+    adding a little extra time and trouble to anyone's journey.
+    </evt-lore>
+    `,
+
+    d6Mod:-3
+},
+
+{
+    image:"./Resources/Event_Asteroidmine.png",
+
+    text:`
+    <evt-title>Asteroid Mining</evt-title>
+
+    <evt-effect>
+    Gain <evt-hot>+1 Resource Point</evt-hot>
+    but also lose
+    <evt-hot>-1 Fuel Point</evt-hot>
+    this turn.
+    </evt-effect>
+
+    <evt-lore>
+    An abundance of metal rich asteroids orbit this location.
+    Spend some time and fuel to gain valuable extra resources.
+    </evt-lore>
+    `,
+
+    d6Mod:-1
+},
+
+{
+    image:"./Resources/Event_Blackhole.png",
+
+    text:`
+    <evt-title>Gravity Well</evt-title>
+
+    <evt-effect>
+    Roll another D6 for Fuel.
+    <evt-hot>Even values add Fuel.</evt-hot>
+    <evt-hot>Odd values subtract Fuel.</evt-hot>
+    </evt-effect>
+
+    <evt-lore>
+    A tricky but rewarding maneuver is using a black hole's
+    gravity well as a slingshot for a potential boost.
+    </evt-lore>
+    `,
+
+    get d6Mod() {
+        const mysteryRoll = Math.floor(Math.random() * 6) + 1;
+        return (mysteryRoll % 2 === 0)
+            ? mysteryRoll
+            : -mysteryRoll;
+    }
+},
+
+{
+    image:"./Resources/Event_Comet.png",
+
+    text:`
+    <evt-title>Comet Collection</evt-title>
+
+    <evt-effect>
+    Gain <evt-hot>+1 Resource Point</evt-hot>
+    but also lose
+    <evt-hot>-1 Fuel Point</evt-hot>
+    this turn.
+    </evt-effect>
+
+    <evt-lore>
+    Chase down comets to collect the bounty of rare minerals
+    erupting from their surfaces as they race through space.
+    </evt-lore>
+    `,
+
+    d6Mod:-1
+},
+
+{
+    image:"./Resources/Event_Merchant.png",
+
+    text:`
+    <evt-title>Space Merchants</evt-title>
+
+    <evt-effect>
+    Gain <evt-hot>+2 Resource Points</evt-hot>
+    but also lose
+    <evt-hot>-2 Fuel Points</evt-hot>
+    this turn.
+    </evt-effect>
+
+    <evt-lore>
+    Famous for their cheap parts, these merchants roam the systems,
+    although sometimes they can hold your ear a little too long.
+    </evt-lore>
+    `,
+
+    d6Mod:-2
+},
+
+{
+    image:"./Resources/Event_Meteor.png",
+
+    text:`
+    <evt-title>Meteor Shower</evt-title>
+
+    <evt-effect>
+    Lose <evt-hot>-1 Resource Point</evt-hot>.
+    The current Location's loss value costs
+    <evt-hot>2 additional Resource Points</evt-hot>
+    if triggered.
+    </evt-effect>
+
+    <evt-lore>
+    A dangerous hail of rocky debris forces losses on anyone
+    unfortunate enough to be caught in the bombardment.
+    </evt-lore>
+    `
+},
+
+{
+    image:"./Resources/Event_Minefield.png",
+
+    text:`
+    <evt-title>The Minefield</evt-title>
+
+    <evt-effect>
+    Check your Fuel Roll.
+    If either D6 shows an
+    <evt-hot>odd number</evt-hot>,
+    lose <evt-hot>-2 Resource Points</evt-hot>.
+    </evt-effect>
+
+    <evt-lore>
+    These mines are packed tight throughout the system,
+    remnants of a long forgotten war.
+    </evt-lore>
+    `
+},
+
+{
+    image:"./Resources/Event_Neutral1.png",
+
+    text:`
+    <evt-title>Neutral Space</evt-title>
+
+    <evt-effect>
+    <evt-hot>No additional effects.</evt-hot>
+    </evt-effect>
+
+    <evt-lore>
+    An empty and quiet sector of space.
+    With little traffic and no known threats,
+    it is safe to travel through.
+    </evt-lore>
+    `
+},
+
+{
+    image:"./Resources/Event_Neutral2.png",
+
+    text:`
+    <evt-title>Neutral Space</evt-title>
+
+    <evt-effect>
+    <evt-hot>No additional effects.</evt-hot>
+    </evt-effect>
+
+    <evt-lore>
+    An empty and quiet sector of space.
+    With little traffic and no known threats,
+    it is safe to travel through.
+    </evt-lore>
+    `
+},
+
+{
+    image:"./Resources/Event_Restricted.png",
+
+    text:`
+    <evt-title>Restricted Sector</evt-title>
+
+    <evt-effect>
+    If the Player has an
+    <evt-hot>odd Resource Point total</evt-hot>,
+    lose <evt-hot>-1 Resource Point</evt-hot>.
+    </evt-effect>
+
+    <evt-lore>
+    A heavily monitored zone of restriction.
+    Only skilled travelers can navigate around
+    the perimeter scans.
+    </evt-lore>
+    `,
+
+    get d20Mod() {
+        return (state.d20a % 2 !== 0) ? -1 : 0;
+    }
+},
+
+{
+    image:"./Resources/Event_SolarFlare.png",
+
+    text:`
+    <evt-title>Solar Flare</evt-title>
+
+    <evt-effect>
+    The Player's Ability is
+    <evt-hot>unavailable</evt-hot>
+    until the Event Deck reshuffles.
+    <evt-hot>(Hindered)</evt-hot>
+    </evt-effect>
+
+    <evt-lore>
+    Powerful solar winds blast outward from the parent star,
+    interfering with ship systems and onboard electronics.
+    </evt-lore>
+    `,
+
+    hinder:true
+},
+
+{
+    image:"./Resources/Event_StaticStorm.png",
+
+    text:`
+    <evt-title>Static Storm</evt-title>
+
+    <evt-effect>
+    Lose <evt-hot>-2 Fuel Points</evt-hot>
+    from this turn's Fuel Roll.
+    </evt-effect>
+
+    <evt-lore>
+    Rare pockets of strange electromagnetic activity react
+    violently with passing ships, creating dangerous storms
+    of static discharge.
+    </evt-lore>
+    `,
+
+    d6Mod:-2
+},
+
+{
+    image:"./Resources/Event_Wormhole.png",
+
+    text:`
+    <evt-title>Wormhole</evt-title>
+
+    <evt-effect>
+    Move back to the
+    <evt-hot>previous Location visited</evt-hot>.
+    Also lose
+    <evt-hot>-2 Fuel Points</evt-hot>
+    this turn.
+    You may then move to any Location with available Fuel.
+    </evt-effect>
+
+    <evt-lore>
+    Strange portals make this area of space uncertain
+    and difficult to navigate.
+    </evt-lore>
+    `,
+
+    d6Mod:-2
+},
+
+{
+    image:"./Resources/Event_Alien.png",
+
+    text:`
+    <evt-title>Alien Encounter</evt-title>
+
+    <evt-effect>
+    If either Fuel Die rolls a
+    <evt-hot>1 or 6</evt-hot>,
+    lose
+    <evt-hot>one quarter of your Resource Points</evt-hot>
+    (rounded favorably).
+    </evt-effect>
+
+    <evt-lore>
+    Encounters with alien civilizations can be unpredictable.
+    Language barriers and unclear motives often complicate matters.
+    </evt-lore>
+    `
+}
+
+
+
+
+
+];
+
+
+
+function setupDice(){
+
+    ["d6a","d6b"].forEach(id=>{
+
+        const die = document.getElementById(id);
+
+        die.addEventListener("click",()=>{
+
+            const roll =
+                Math.floor(Math.random()*6)+1;
+
+            die.textContent = roll;
+
+            state[id] = roll;
+
+            updateD6Total();
+            saveState();
+        });
+    });
+
+    ["d20a","d20b"].forEach(id=>{
+
+        const d20 = document.getElementById(id);
+
+        // Helper function to update the d20 value safely
+        function updateD20(change) {
+            let val = parseInt(d20.textContent);
+            if (isNaN(val)) val = 0; // Fallback if text is empty or not a number
+
+            val += change;
+
+            if(val < 0) val = 0;
+            if(val > 20) val = 20;
+
+            d20.textContent = val;
+            state[id] = val;
+            saveState();
+        }
+
+        // Existing mousewheel functionality
+        d20.addEventListener("wheel", e=>{
+            e.preventDefault();
+            if(e.deltaY < 0) updateD20(1);  // Wheel up increases
+            else updateD20(-1);             // Wheel down decreases
+        });
+
+        // Left click to increase (+1)
+        d20.addEventListener("click", e => {
+            e.preventDefault();
+            updateD20(1);
+        });
+
+        // Right click to decrease (-1)
+        d20.addEventListener("contextmenu", e => {
+            e.preventDefault(); // Prevents the browser's right-click menu
+            updateD20(-1);
+        });
+    });
+}
+
+
+let eventBag = [];
+
+function restoreEventBag(){
+
+    if(state.eventBag && state.eventBag.length){
+        eventBag = [...state.eventBag];
+    } else {
+        refillEventBag();
+    }
+}
+
+function refillEventBag(){
+
+    eventBag = [];
+
+    for(let i=0;i<EVENTS.length;i++){
+        eventBag.push(i);
+    }
+
+    for(let i=eventBag.length-1;i>0;i--){
+
+        const j =
+            Math.floor(Math.random()*(i+1));
+
+        [eventBag[i],eventBag[j]] =
+        [eventBag[j],eventBag[i]];
+    }
+
+    state.eventBag = [...eventBag];
+    saveState();
+}
+
+
+function updatePlayerStatus(){
+
+    ["playerToken", "playerToken2"].forEach(id => {
+        
+        const player = document.getElementById(id);
+        
+        if (!player) return; 
+
+        if (state.hindered) {
+            player.classList.add("hindered");
+        } else {
+            player.classList.remove("hindered");
+        }
+    });
+}
+
+
+
+function drawEvent(){
+
+    state.turn++;
+
+    updateTurnCounter();
+
+if(eventBag.length===0){
+
+    state.hindered = false;
+
+    updatePlayerStatus();
+
+    refillEventBag();
+
+    saveState();
+}
+
+const index = eventBag.pop();
+
+state.currentEvent = index;
+state.eventBag = [...eventBag];
+
+    const event = EVENTS[index];
+            state.d6Modifier = event.d6Mod ?? 0;
+            state.d20Modifier = event.d20Mod ?? 0;
+
+        if(typeof event.d6Mod !== "undefined"){
+            state.d6Modifier = event.d6Mod;
+        }
+
+        if(typeof event.d20Mod !== "undefined"){
+            state.d20Modifier = event.d20Mod;
+        }
+
+        if(event.hinder){
+
+            state.hindered = true;
+
+            updatePlayerStatus();
+        }
+    rollBothD6();
+    saveState();
+
+    document.getElementById(
+        "eventImage"
+    ).src = event.image;
+
+    document.getElementById(
+        "eventText"
+    ).innerHTML = event.text;
+}
+
+
+function rollBothD6(){
+
+    state.d6a =
+        Math.floor(Math.random()*6)+1;
+
+    state.d6b =
+        Math.floor(Math.random()*6)+1;
+
+    document.getElementById(
+        "d6a"
+    ).textContent = state.d6a;
+
+    document.getElementById(
+        "d6b"
+    ).textContent = state.d6b;
+
+    updateD6Total();
+}
+
+
+function updateD6Total(){
+
+    const total =
+        state.d6a +
+        state.d6b +
+        state.d6Modifier;
+
+    document.getElementById("d6Total").textContent = total;
+
+    const mod = state.d6Modifier;
+
+    document.getElementById("d6ModifierDisplay").textContent =
+        "Event Modifier: " + (mod >= 0 ? "+" + mod : mod);
+}
+
+function updateD20Total(){
+
+    const total =
+        state.d20a +
+        state.d20Modifier;
+
+    document.getElementById("d20Total").textContent = total;
+
+    const mod = state.d20Modifier;
+
+    document.getElementById("d20ModifierDisplay").textContent =
+        "D20 RP Mod: " + (mod >= 0 ? "+" + mod : mod);
+}
+
+
+
+
+loadState();      /////////////// LOAD STATE KEY
+
+updateTurnCounter();
+
+makeDraggable(
+    document.getElementById(
+        "playerToken"
+    )
+);
+makeDraggable(
+    document.getElementById("playerToken2")
+);
+
+
+document
+.querySelectorAll(".gold")
+.forEach(makeDraggable);
+document
+.getElementById(
+    "randomBoardBtn"
+)
+.addEventListener(
+    "click",
+    randomizeBoard
+);
+setupDice();
+loadBoard(state.currentBoard);
+
+updateD6Total();
+
+updatePlayerStatus();
+
+if(state.currentEvent !== null){
+
+    const event = EVENTS[state.currentEvent];
+
+    document.getElementById("eventImage").src =
+        event.image;
+
+    document.getElementById("eventText").innerHTML =
+        event.text;
+}
+
+
+document.getElementById("generate").addEventListener("click", function() {
+
+    // Only generate when the Custom Generated Sector is active
+    if (BOARDS[state.currentBoard] === "GENERATED") {
+        generateStarjournMap();
+    }
+
+});
+
+document
+.getElementById("d6a")
+.textContent=state.d6a;
+
+document
+.getElementById("d6b")
+.textContent=state.d6b;
+
+document
+.getElementById("d20a")
+.textContent=state.d20a;
+
+document
+.getElementById("d20b")
+.textContent=state.d20b;
+
+// On page load, display the text for the saved board index
+document.getElementById("board-name").textContent = BOARD_NAMES[state.currentBoard || 0];
+document.getElementById("boardSelector").value =
+    state.currentBoard;
+
+
+for(const id in state.tokens){
+
+    const token =
+        document.getElementById(id);
+
+    if(!token) continue;
+
+    board.appendChild(token);
+
+    token.style.position=
+        "absolute";
+
+    token.style.left=
+        state.tokens[id].x+"px";
+
+    token.style.top=
+        state.tokens[id].y+"px";
+}
+
+restoreEventBag();
+
+document
+.getElementById("eventImage")
+.addEventListener(
+    "click",
+    drawEvent
+);
+
+
+document.getElementById("resetBtn").addEventListener("click", resetGame);
+
+function resetGame() {
+    
+    localStorage.clear(); 
+
+    
+    location.reload(); 
+
+
+    state.turn = 0;
+    state.playerPosition = 0; 
+    state.tokens = 0;         
+    
+    
+    updateTurnCounter();
+    if (typeof updatePlayerPositionUI === "function") {
+        updatePlayerPositionUI(); 
+    }
+    if (typeof updateTokenDisplay === "function") {
+        updateTokenDisplay();     
+    }
+
+    
+    state.d6a = 1;
+    state.d6b = 1;
+    state.d20a = 3;
+    state.d20b = 0;
+    state.d6Modifier = 0;
+    state.d20Modifier = 0;
+    
+    document.getElementById("d6a").textContent = "1";
+    document.getElementById("d6b").textContent = "1";
+    document.getElementById("d6Total").textContent = "2";
+    document.getElementById("d6ModifierDisplay").textContent = "Modifier: 0";
+    document.getElementById("d20a").textContent = "3";
+    document.getElementById("d20b").textContent = "0";
+
+    
+    if (document.getElementById("eventImage")) {
+        document.getElementById("eventImage").src = "https://via.placeholder.com/80";
+    }
+    if (document.getElementById("eventText")) {
+        document.getElementById("eventText").textContent = "Click the event icon to draw an event.";
+    }
+
+
+    if (typeof resetEvents === "function") {
+        resetEvents();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+   function rand(min,max){return min + Math.random()*(max-min)}
+  function randInt(min,max){return Math.floor(rand(min,max+1))}
+
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const canvas = document.getElementById('canvas');
+
+  function clearSVG(){ while(canvas.firstChild) canvas.removeChild(canvas.firstChild); }
+
+  function createSVG(tag,attrs){ const el = document.createElementNS(SVG_NS,tag); if(attrs) for(let k in attrs) el.setAttribute(k,attrs[k]); return el; }
+
+  function color(r,g,b){ return `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`; }
+  const SHADOW_OFFSET = 0.0; // fraction of radius to shift darkside 
+
+  function polygonPoints(cx,cy,r,sides, jitter){ let pts=[]; for(let i=0;i<sides;i++){ let a = (Math.PI*2/sides)*i; let rr = r * (1 + (jitter? (Math.random()*jitter- jitter/2) : 0)); let x = cx + Math.cos(a)*rr; let y = cy + Math.sin(a)*rr; pts.push(x + ',' + y);} return pts.join(' ')}
+
+  function createPolygon(parent,cx,cy,r,sides){ const p = createSVG('polygon',{points:polygonPoints(cx,cy,r,sides,0.25)}); parent.appendChild(p); return p; }
+
+  // draw a 5-point star polygon
+  function createStar(parent,x,y,outerR,fill){
+    const innerR = outerR * 0.45;
+    let pts = [];
+    for(let i=0;i<5;i++){
+      let a = -Math.PI/2 + i*(Math.PI*2/5);
+      let ox = x + Math.cos(a)*outerR;
+      let oy = y + Math.sin(a)*outerR;
+      pts.push(ox+','+oy);
+      let ai = a + Math.PI/5;
+      let ix = x + Math.cos(ai)*innerR;
+      let iy = y + Math.sin(ai)*innerR;
+      pts.push(ix+','+iy);
+    }
+    const star = createSVG('polygon',{points:pts.join(' '), fill:fill, stroked:'false'});
+    parent.appendChild(star);
+    return star;
+  }
+
+  // Palettes (ported from original JSX)
+  const PALETTES = [
+    {base:[70,140,220], land:[90,200,150]},
+    {base:[220,170,90], land:[200,120,70]},
+    {base:[100,190,190], land:[155,175,90]},
+    {base:[120,227,227], land:[145,255,80]},
+    {base:[200,80,80], land:[255,130,40]},
+    {base:[190,30,35], land:[190,125,100]},
+    {base:[230,230,127], land:[255,200,60]},
+    {base:[60,115,190], land:[205,220,60]},
+    {base:[25,15,190], land:[70,140,65]},
+    {base:[130,205,130], land:[130,135,95]},
+    {base:[240,80,35], land:[175,125,55]},
+    {base:[255,255,255], land:[200,200,160]},
+    {base:[180,220,255], land:[255,255,255]},
+    {base:[180,220,180], land:[255,245,165]},
+    {base:[70,90,115], land:[126,145,90]},
+    {base:[125,70,90], land:[175,70,100]},
+    {base:[80,80,180], land:[190,220,145]},
+    {base:[130,140,100], land:[150,100,60]},
+    {base:[170,190,210], land:[100,150,172]},
+    {base:[50,100,80], land:[200,230,100]},
+    {base:[10,60,60], land:[90,205,120]},
+    {base:[110,70,150], land:[240,160,220]},
+    {base:[140,100,70], land:[210,200,180]},
+    {base:[45,160,130], land:[165,135,190]},
+    {base:[90,160,180], land:[190,130,80]},
+    {base:[255,160,90], land:[255,215,75]}
+  ];
+
+  // Ensure a <defs> element exists for gradients
+  function ensureDefs(){ let defs = canvas.querySelector('defs'); if(!defs){ defs = createSVG('defs'); canvas.appendChild(defs);} return defs; }
+
+  // Create a rotated linear gradient for darkside shadow
+  function makeShadowGradient(id, rotation){ const defs = ensureDefs(); const g = createSVG('linearGradient',{id:id, x1:'0%', y1:'0%', x2:'100%', y2:'0%'}); g.setAttribute('gradientTransform', `rotate(${rotation})`); const s1 = createSVG('stop',{offset:'0%', 'stop-color':'rgba(0,0,0,0)','stop-opacity':'0'}); const s2 = createSVG('stop',{offset:'100%', 'stop-color':'#000','stop-opacity':'1'}); g.appendChild(s1); g.appendChild(s2); defs.appendChild(g); return g; }
+
+  // Apply a darkside shadow ellipse to a parent group at cx,cy with radius r
+  function applyDarkside(parent, cx, cy, r, rotation=28, opacity=0.88){ const gid = 'sh' + Math.random().toString(36).slice(2); makeShadowGradient(gid, rotation); const sh = createSVG('ellipse',{cx:cx - r*SHADOW_OFFSET, cy:cy, rx:r, ry:r, fill:`url(#${gid})`, opacity:opacity}); parent.appendChild(sh); return sh; }
+
+  // Planet (simplified port)
+  function createPlanet(parent,cx,cy,r,opts){
+    const g = createSVG('g'); parent.appendChild(g);
+    let hasCity = false;
+    let cityRating = 0;
+    // choose palette
+    const palette = PALETTES[randInt(0, PALETTES.length-1)];
+    // base
+    const baseColor = color(palette.base[0], palette.base[1], palette.base[2]);
+    const base = createSVG('circle',{cx:cx,cy:cy,r:r,fill:baseColor}); g.appendChild(base);
+
+    // land
+    const landZones = [];
+    if(opts.land){
+      const landGroup = createSVG('g'); g.appendChild(landGroup);
+      const baseCount = randInt(4,10);
+      for(let i=0;i<baseCount;i++){
+        const px = cx + rand(-r*0.32,r*0.32);
+        const py = cy + rand(-r*0.32,r*0.32);
+        const pr = rand(r*0.08,r*0.5);
+        landZones.push({x:px,y:py,r:pr});
+        // land color based on palette.land with slight random tint
+        const landR = Math.min(255, Math.max(0, palette.land[0] + rand(-30,30)));
+        const landG = Math.min(255, Math.max(0, palette.land[1] + rand(-30,30)));
+        const landB = Math.min(255, Math.max(0, palette.land[2] + rand(-30,30)));
+        const poly = createSVG('polygon',{points:polygonPoints(px,py,pr,randInt(4,6),0.45),fill:color(landR,landG,landB)});
+        landGroup.appendChild(poly);
+      }
+    }
+
+    // mountains
+    if(opts.mountains && landZones.length){
+      const mt = createSVG('g'); g.appendChild(mt);
+      let mtCount = randInt(10,20);
+      for(let i=0;i<mtCount;i++){
+        const zone = landZones[randInt(0,landZones.length-1)];
+        const tx = zone.x + rand(-zone.r*0.8,zone.r*0.8);
+        const ty = zone.y + rand(-zone.r*0.8,zone.r*0.8);
+        if(Math.hypot(tx-zone.x,ty-zone.y) < zone.r*0.9){
+          const tri = createSVG('polygon',{points:polygonPoints(tx,ty,rand(2,12),3,0.1),fill:'#333',opacity:0.5});
+          tri.setAttribute('transform', `rotate(18 ${tx} ${ty})`);
+          mt.appendChild(tri);
+        }
+      }
+    }
+
+    // clouds
+    if(opts.clouds){ const clouds = createSVG('g'); g.appendChild(clouds); for(let i=0;i<randInt(0,12);i++){ const w=rand(20,60),h=rand(8,28); const e = createSVG('ellipse',{cx:cx+rand(-r*0.3,r*0.3),cy:cy+rand(-r*0.65,r*0.65),rx:w,ry:h,fill:'#fff',opacity:rand(0.08,0.22)}); clouds.appendChild(e);} }
+
+    // poles (glacial caps) 
+    // when enabled, only 66% of planets to have 
+    if(opts.poles && Math.random() < 0.6666667){
+      const poleContent = createSVG('g');
+      const poleGroup = createSVG('g');
+      poleGroup.appendChild(poleContent);
+
+      const defs = ensureDefs();
+      if(!defs.querySelector('#roughen')){
+        const f = createSVG('filter',{id:'roughen', x:'-50%', y:'-50%', width:'200%', height:'200%'});
+        const turb = createSVG('feTurbulence',{type:'fractalNoise', baseFrequency:'0.8', numOctaves:'2', seed: Math.floor(Math.random()*1000)});
+        const disp = createSVG('feDisplacementMap',{in:'SourceGraphic', scale:'4', xChannelSelector:'R', yChannelSelector:'G'});
+        f.appendChild(turb); f.appendChild(disp); defs.appendChild(f);
+      }
+
+      function addPole(centerY){
+        const poleRadius = r * rand(0.22,0.55);
+        const basePole = createPolygon(poleContent, cx, centerY, poleRadius, randInt(5,10));
+        basePole.setAttribute('fill', '#ffffff');
+        basePole.setAttribute('stroke', 'none');
+        const sy = rand(0.55,0.65);
+        basePole.setAttribute('transform', `translate(${cx} ${centerY}) scale(1 ${sy}) translate(${-cx} ${-centerY})`);
+        basePole.setAttribute('filter', 'url(#roughen)');
+
+        for(let i=0;i<randInt(2,5);i++){
+          const d = createPolygon(
+            poleContent,
+            cx + rand(-poleRadius * 0.2, poleRadius * 0.2),
+            centerY + rand(-poleRadius * 0.1, poleRadius * 0.1),
+            poleRadius * rand(0.4, 0.7),
+            randInt(6, 10)
+          );
+          d.setAttribute('fill', color(rand(220,240), rand(235,250), 255));
+          d.setAttribute('stroke', 'none');
+          const sy2 = rand(0.55,0.75);
+          const rot = rand(-6,6);
+          d.setAttribute('transform', `translate(${cx} ${centerY}) rotate(${rot}) scale(1 ${sy2}) translate(${-cx} ${-centerY})`);
+          d.setAttribute('filter', 'url(#roughen)');
+          d.setAttribute('opacity', rand(0.8,1));
+        }
+      }
+
+      const poleOffset = r * 0.975;
+      addPole(cy + poleOffset);
+      addPole(cy - (poleOffset * 1.052));
+
+      // rotate ~28deg counterclockwise
+      const rot = -28;
+      poleContent.setAttribute('transform', `rotate(${rot} ${cx} ${cy})`);
+
+      const clipId = 'poleclip_' + Math.random().toString(36).slice(2);
+      const cp = createSVG('clipPath',{id:clipId});
+      const clipCircle = createSVG('circle',{cx:cx, cy:cy, r:r});
+      cp.appendChild(clipCircle);
+      defs.appendChild(cp);
+      poleGroup.setAttribute('clip-path', `url(#${clipId})`);
+      g.appendChild(poleGroup);
+    }
+
+    // shadow (gradient darkside) for planet
+    if(opts.shadow){ applyDarkside(g, cx, cy, r*(1.02), 28, 0.88); }
+
+    // rings: create horizontal ellipses, duplicate back+front, clip front with rectangle whose top aligns to equator, then rotate both groups together
+    if(opts.rings && Math.random()<0.4){
+      const ringsBack = createSVG('g');
+      ringsBack.setAttribute('id','RINGS_BACK');
+
+      const shift = 5;
+      const rVal = Math.min(255, palette.land[0] + shift);
+      const gVal = Math.min(255, palette.land[1] + shift);
+      const bVal = Math.min(255, palette.land[2] + shift);
+      const gName = `RingFade_${rVal}_${gVal}_${bVal}`;
+      const defs = ensureDefs();
+      if(!defs.querySelector('#'+gName)){
+        const lg = createSVG('linearGradient',{id:gName, x1:'0%', y1:'0%', x2:'100%', y2:'0%'});
+        lg.appendChild(createSVG('stop',{offset:'0%','stop-color':color(rVal,gVal,bVal)}));
+        lg.appendChild(createSVG('stop',{offset:'100%','stop-color':color(rVal,gVal,bVal)}));
+        defs.appendChild(lg);
+      }
+
+      // pick a single rotation for the whole ring collection (small variation around horizontal)
+      const rot = rand(40,60);
+
+      let maxRx = 0; let maxRy = 0;
+      const numRings = randInt(2,5);
+      for(let i=0;i<numRings;i++){
+        const step = i * 0.2;
+        const rx = r * (0.35 + step);
+        const ry = r * (1.6 + step);
+        if(rx > maxRx) maxRx = rx;
+        if(ry > maxRy) maxRy = ry;
+        // ellipses oriented along horizontal equator (no per-ring rotation)
+        const el = createSVG('ellipse',{cx:cx, cy:cy, rx:rx, ry:ry, fill:'none', stroke:`url(#${gName})`, 'stroke-width': rand(0.55, 8.5), opacity:1});
+        ringsBack.appendChild(el);
+      }
+
+      // place back rings behind the planet base
+      // apply rotation to the back group
+      ringsBack.setAttribute('transform', `rotate(${rot} ${cx} ${cy})`);
+      g.insertBefore(ringsBack, base);
+
+      // duplicate front rings and clip with rectangle that bisects the group along its long axis
+      const ringsFront = ringsBack.cloneNode(true);
+      ringsFront.setAttribute('id','RINGS_CLIP_GROUP');
+      const cpId = 'ringclip_' + Math.random().toString(36).slice(2);
+      const cp = createSVG('clipPath',{id:cpId});
+      const groupWidth = maxRx * 6;
+      const groupHeight = maxRy * 1.5;
+      // create a rectangle whose top is at the planet equator (cy), full group width, half the height;
+      // rotate the rect around the planet center so it aligns with the rings' major axis
+      const rect = createSVG('rect',{x: cx - groupWidth/2, y: cy, width: groupWidth, height: groupHeight/2});
+      rect.setAttribute('transform', `rotate(${rot + 220} ${cx} ${cy})`);
+      cp.appendChild(rect);
+      defs.appendChild(cp);
+      ringsFront.setAttribute('clip-path', `url(#${cpId})`);
+      // apply same rotation to front group (clone already has transform from clone; reset then set)
+      ringsFront.setAttribute('transform', `rotate(${rot} ${cx} ${cy})`);
+      g.appendChild(ringsFront);
+    }
+
+    // moons (inherit planet palette colors)
+    if(opts.moons){ const moons = createSVG('g'); g.appendChild(moons); const inherit = rand(0.55,0.86); for(let i=0;i<randInt(0,4);i++){ const angle=rand(0,Math.PI*2),dist=r+rand(40,100),mx=cx+Math.cos(angle)*dist,my=cy+Math.sin(angle)*dist,mr=rand(6,15); const baseGray = randInt(150,240); const rCol = Math.min(255, baseGray * (1 - inherit) + palette.land[0] * inherit); const gCol = Math.min(255, baseGray * (1 - inherit) + palette.land[1] * inherit); const bCol = Math.min(255, baseGray * (1 - inherit) + palette.land[2] * inherit); const m = createSVG('circle',{cx:mx,cy:my,r:mr,fill:color(rCol,gCol,bCol),opacity:1}); moons.appendChild(m); if(opts.shadow){ applyDarkside(moons, mx, my, mr, 28, 0.88); } } }
+
+    // asteroids (grayscale)
+    if(opts.asteroids){ const aG=createSVG('g'); g.appendChild(aG); for(let i=0;i<randInt(0,28);i++){ const angle=rand(0,Math.PI*2),dist=r+rand(30,120),ax=cx+Math.cos(angle)*dist,ay=cy+Math.sin(angle)*dist; const rock=createPolygon(aG,ax,ay,rand(2,8),randInt(4,7)); const gVal = randInt(80,180); rock.setAttribute('fill',color(gVal,gVal,gVal)); rock.setAttribute('opacity',rand(0.6,1)); }}
+
+    // city lights
+    if(opts.city && landZones.length && Math.random()<0.6){
+      const cityG=createSVG('g'); g.appendChild(cityG);
+      const zone=landZones[randInt(0,landZones.length-1)];
+      for(let i=0;i<randInt(6,20);i++){ const ox=zone.x+rand(-zone.r/2,zone.r/2), oy=zone.y+rand(-zone.r/2,zone.r/2); const d=rand(1.5,3); const tintRoll = Math.random(); let rL=255,gL=255,bL=255; if(tintRoll<0.25){ gL = rand(180,210); bL = rand(50,100);} else if(tintRoll>0.75){ rL = rand(180,190); gL = rand(230,245);} const dot=createSVG('circle',{cx:ox,cy:oy,r:d,fill:color(rL,gL,bL),opacity:rand(0.25,0.7)}); cityG.appendChild(dot);} 
+      hasCity = true;
+      cityRating = randInt(1,3);
+    }
+
+    return { group: g, hasCity: hasCity, cityRating: cityRating };
+  }
+
+  function createAsteroidField(parent,cx,cy,r){ const g=createSVG('g'); parent.appendChild(g); for(let i=0;i<randInt(40,150);i++){ const angle=rand(0,Math.PI*2),dist=Math.pow(Math.random(),1.75)*r*2.8,x=cx+Math.cos(angle)*dist,y=cy+Math.sin(angle)*dist; const rock=createPolygon(g,x,y,rand(2,10),randInt(4,8)); const gVal = randInt(90,180); rock.setAttribute('fill',color(gVal,gVal,gVal)); rock.setAttribute('opacity',rand(0.6,1)); } return g }
+
+  function createNebula(parent,cx,cy,r){ const g=createSVG('g'); parent.appendChild(g); const baseR=randInt(120,255), baseG=randInt(50,200), baseB=randInt(120,255); for(let l=0;l<randInt(3,6);l++){ for(let i=0;i<randInt(12,25);i++){ const angle=rand(0,Math.PI*2),dist=Math.pow(Math.random(),0.7)*r*2.5,x=cx+Math.cos(angle)*dist,y=cy+Math.sin(angle)*dist,w=rand(80,200),h=rand(60,160); const e=createSVG('ellipse',{cx:x,cy:y,rx:w,ry:h,fill:color(Math.min(255,baseR+rand(-50,50)),Math.min(255,baseG+rand(-50,50)),Math.min(255,baseB+rand(-50,50))),opacity:rand(0.04,0.12)}); e.setAttribute('transform',`rotate(${rand(-30,30)} ${x} ${y})`); g.appendChild(e);} }
+    // core slightly more visible
+    const coreR=r*rand(0.2,0.9); const core=createSVG('circle',{cx:cx,cy:cy,r:coreR,fill:color(Math.min(255,baseR+60),Math.min(255,baseG+60),Math.min(255,baseB+60)),opacity:rand(0.01,0.05)}); g.appendChild(core);
+    for(let s=0;s<randInt(10,45);s++){ const sz=rand(2,6.5); const star=createSVG('circle',{cx:cx+rand(-r,r),cy:cy+rand(-r,r),r:sz,fill:color(Math.min(255,baseR+80),Math.min(255,baseG+80),Math.min(255,baseB+80)),opacity:rand(0.6,1)}); g.appendChild(star);} 
+    // overall nebula transparency slightly increased
+    g.setAttribute('opacity', rand(0.18,0.36));
+    return g }
+
+  
+  function createBlackHole(parent, cx, cy, r) {
+    const g = createSVG('g'); parent.appendChild(g);
+
+    // 1. CHOOSE A SMALLER SIZE FOR THE CORE AND ACCRETION LAYER
+    // Adjust the 0.55 factor to change how tiny the actual black circle is
+    const coreR = r * 0.55; 
+
+    // Create the stepping dark background layers using the new core size
+    for (let i = 0; i < 9; i++) { 
+        const t = i / 9; 
+        const size = coreR * (1 + t * 0.5); 
+        const s = createSVG('circle', { cx: cx, cy: cy, r: size, fill: '#111', opacity: 0.35 * (1 - t) }); 
+        g.appendChild(s); 
+    }    
+    
+    // Choose a stroke color and a slightly lighter aura color
+    const strokeR = randInt(100, 255), strokeG = randInt(100, 255), strokeB = randInt(100, 255);
+    const auraR = Math.min(255, strokeR + 60), auraG = Math.min(255, strokeG + 60), auraB = Math.min(255, strokeB + 60);
+
+    const defs = ensureDefs();
+    // Per-instance aura gradient
+    const auraId = 'bhAura_' + Math.random().toString(36).slice(2);
+    const rg = createSVG('radialGradient', { id: auraId, cx: '50%', cy: '50%', r: '50%', fx: '50%', fy: '50%' });
+    rg.appendChild(createSVG('stop', { offset: '0%', 'stop-color': color(auraR, auraG, auraB), 'stop-opacity': '0.5' }));
+    rg.appendChild(createSVG('stop', { offset: '60%', 'stop-color': color(auraR, auraG, auraB), 'stop-opacity': '0.18' }));
+    rg.appendChild(createSVG('stop', { offset: '100%', 'stop-color': color(auraR, auraG, auraB), 'stop-opacity': '0' }));
+    defs.appendChild(rg);
+
+    // Create/ensure a subtle roughen filter (turbulence + displacement)
+    if (!defs.querySelector('#roughen')) {
+        const f = createSVG('filter', { id: 'roughen', x: '-50%', y: '-50%', width: '200%', height: '200%' });
+        const turb = createSVG('feTurbulence', { type: 'fractalNoise', baseFrequency: '0.6', numOctaves: '2', seed: Math.floor(Math.random() * 1000) });
+        const disp = createSVG('feDisplacementMap', { in: 'SourceGraphic', scale: '4', xChannelSelector: 'R', yChannelSelector: 'G' });
+        f.appendChild(turb); f.appendChild(disp); defs.appendChild(f);
+    }
+
+    // 2. THE AURAS (These still use the original 'r' to stretch far across the numbers)
+    const auraRot = rand(-42.5, 12.5);
+    const aura1 = createSVG('ellipse', { cx: cx, cy: cy, rx: r * 2.6, ry: r * 1.3, fill: `url(#${auraId})`, opacity: 0.9 });
+    aura1.setAttribute('transform', `rotate(${auraRot} ${cx} ${cy})`);
+    aura1.setAttribute('filter', 'url(#roughen)'); g.appendChild(aura1);
+
+    const aura2 = createSVG('ellipse', { cx: cx, cy: cy, rx: r * 2.2, ry: r * 1.0, fill: `url(#${auraId})`, opacity: 0.8 });
+    aura2.setAttribute('transform', `rotate(${90 + auraRot} ${cx} ${cy})`);
+    aura2.setAttribute('filter', 'url(#roughen)'); g.appendChild(aura2);
+
+    // 3. MAIN CORE (This now uses the new smaller coreR size)
+    const core = createSVG('circle', { cx: cx, cy: cy, r: coreR, fill: '#000', stroke: color(strokeR, strokeG, strokeB), 'stroke-width': 2.5 }); 
+    g.appendChild(core); 
+    
+    return g;
+}
+
+
+  function createGasGiant(parent,cx,cy,r,opts){ 
+    const g=createSVG('g'); 
+    parent.appendChild(g); 
+    const rr=r*rand(1.61,1.7);
+    const palette = PALETTES[randInt(0, PALETTES.length-1)];
+    const baseColor = color(palette.base[0], palette.base[1], palette.base[2]);
+    const base=createSVG('circle',{cx:cx,cy:cy,r:rr,fill:baseColor}); 
+    g.appendChild(base);
+    
+    const clip = createSVG('clipPath'); 
+    const cid='mask'+Math.random().toString(36).slice(2); 
+    clip.setAttribute('id',cid); 
+    const maskCircle=createSVG('circle',{cx:cx,cy:cy,r:rr}); 
+    clip.appendChild(maskCircle); 
+    const defs = ensureDefs(); 
+    defs.appendChild(clip); 
+    
+    const bandGroup=createSVG('g'); 
+    bandGroup.setAttribute('clip-path',`url(#${cid})`);
+    
+    // Planet Bands
+    for(let i=0;i<randInt(24,40);i++){ 
+        const t=i/(randInt(24,40)-1); 
+        const lat=(t-0.5)*2; 
+        const yOffset=Math.sin(lat*Math.PI*0.5)*rr; 
+        const h=rand(rr*0.2,rr*0.45);
+        
+        const mix = Math.random();
+        let rC,gC,bC;
+        if(mix < 0.33){ rC = palette.base[0]*0.6; gC = palette.base[1]*0.6; bC = palette.base[2]*0.6; }
+        else if(mix < 0.66){ rC = palette.base[0]; gC = palette.base[1]; bC = palette.base[2]; }
+        else { rC = (palette.base[0] + palette.land[0]) * 0.5; gC = (palette.base[1] + palette.land[1]) * 0.5; bC = (palette.base[2] + palette.land[2]) * 0.5; }
+        
+        const rect=createSVG('rect',{x:cx-rr,y:cy+yOffset-h/2,width:rr*2,height:h,fill:color(rC,gC,bC),opacity:rand(0.25,0.85)});
+        rect.setAttribute('transform',`rotate(${rand(-2,4)} ${cx} ${cy})`); 
+        bandGroup.appendChild(rect);
+    }
+    
+   
+    if (Math.random() < 0.6){
+        const stormCount = 1 + randInt(1, 3);
+        
+        for (let s = 0; s < stormCount; s++){
+            const w = rr * rand(0.25, 0.5);
+            const h = w * rand(0.4, 0.7);
+            
+            const sx = cx + rand(-rr * 0.4, rr * 0.4);
+            const sy = cy + rand(-rr * 0.3, rr * 0.3);
+            
+        
+            const stormR = Math.min(255, palette.base[0] + rand(60, 120));
+            const stormG = Math.min(255, palette.base[1] + rand(-20, 60));
+            const stormB = Math.max(0, palette.base[2] - rand(40, 80));
+            const stormColor = color(stormR, stormG, stormB);
+            
+            const stormOpacity = rand(50, 70) / 100;
+            
+            const storm = createSVG('ellipse', {
+                cx: sx,
+                cy: sy,
+                rx: w / 2,
+                ry: h / 2,
+                fill: stormColor,
+                opacity: stormOpacity
+            });
+            
+            bandGroup.appendChild(storm);
+        }
+    }
+    
+    g.appendChild(bandGroup);
+    
+    if(opts.shadow){ 
+        applyDarkside(g, cx, cy, rr, 28, 0.88); 
+    } 
+    
+    return g;
+}
+
+
+  function addGlobalGrid(parent,cols,rows){ const group=createSVG('g'); parent.appendChild(group); const CELL_SIZE=420; const startX=150 + CELL_SIZE*0.5; const startY=150 + CELL_SIZE*0.5; for(let r=0;r<rows;r++){ for(let c=0;c<cols;c++){ const cx=startX + c*CELL_SIZE; const cy=startY + r*CELL_SIZE; const rect=createSVG('rect',{x:cx - CELL_SIZE/2, y:cy - CELL_SIZE/2, width:CELL_SIZE, height:CELL_SIZE, fill:'none', stroke:'#fff', 'stroke-width':1.2, opacity:0.28}); group.appendChild(rect);} } return group }
+
+  function addCellStats(parent,cols,rows,cellTypes,cellHasCity,cellCityRating){
+    const CELL_SIZE=420;
+    const startX=150 + CELL_SIZE*0.5;
+    const startY=150 + CELL_SIZE*0.5;
+
+    function plusRoll(type, hasCity){
+        if (type === "planet"){
+            if (hasCity) return randInt(1, 3);
+            return randInt(0, 3);
+        }
+        if (type === "asteroid") return randInt(0, 1);
+        if (type === "nebula") return randInt(0, 0);
+        if (type === "blackhole") return 0;
+        if (type === "gasgiant") return randInt(0, 1);
+        return randInt(0, 3);
+    }
+
+    function minusRoll(type, hasCity){
+        if (type === "planet"){
+            if (hasCity) return randInt(1, 3);
+            return randInt(1, 3);
+        }
+        if (type === "asteroid") return randInt(1, 3);
+        if (type === "nebula") return randInt(1, 2);
+        if (type === "blackhole") return randInt(4, 5);
+        if (type === "gasgiant") return randInt(1, 3);
+        return randInt(1, 3);
+    }
+
+    for(let r=0;r<rows;r++){
+        for(let c=0;c<cols;c++){
+            const index=r*cols+c;
+            const cx=startX + c*CELL_SIZE;
+            const cy=startY + r*CELL_SIZE;
+            
+            const type = cellTypes ? cellTypes[index] : "planet";
+            const hasCity = cellHasCity ? cellHasCity[index] : false;
+
+            const rolls = [randInt(1,9),randInt(1,9),randInt(1,9),randInt(1,9)];
+            const fontSize=48;
+            const white='#ffffff';
+
+            // Top text side
+            const t1=createSVG('text',{x:cx, y:cy - CELL_SIZE*0.4125, 'text-anchor':'middle', 'dominant-baseline':'central', 'font-size':fontSize, 'font-weight':'bold', fill:white, opacity:0.73});
+            t1.textContent=rolls[0];
+            parent.appendChild(t1);
+
+            // Bottom text side
+            const t2=createSVG('text',{x:cx, y:cy + CELL_SIZE*0.4125, 'text-anchor':'middle', 'dominant-baseline':'central', 'font-size':fontSize, 'font-weight':'bold', fill:white, opacity:0.73});
+            t2.textContent=rolls[1];
+            parent.appendChild(t2);
+
+            // Left text side
+            const t3=createSVG('text',{x:cx - CELL_SIZE*0.4125, y:cy, 'text-anchor':'middle', 'dominant-baseline':'central', 'font-size':fontSize, 'font-weight':'bold', fill:white, opacity:0.73});
+            t3.textContent=rolls[2];
+            parent.appendChild(t3);
+
+            // Right text side
+            const t4=createSVG('text',{x:cx + CELL_SIZE*0.4125, y:cy, 'text-anchor':'middle', 'dominant-baseline':'central', 'font-size':fontSize, 'font-weight':'bold', fill:white, opacity:0.73});
+            t4.textContent=rolls[3];
+            parent.appendChild(t4);
+
+
+            // Calculate modifier values
+            const plusVal = "+" + plusRoll(type, hasCity);
+            const minusVal = "-" + minusRoll(type, hasCity);
+            
+            // Positioning coordinates
+            const plusX = cx - CELL_SIZE * 0.25;
+            const plusY = cy - CELL_SIZE * 0.33; 
+            
+            const minusX = cx + CELL_SIZE * 0.25;
+            const minusY = cy + CELL_SIZE * 0.25; 
+
+            // Render + modifier text (Cyan, Bold)
+            const plusText = createSVG('text', {
+                x: plusX,
+                y: plusY,
+                'text-anchor': 'middle',
+                'dominant-baseline': 'central',
+                'font-size': fontSize, 
+                'font-weight': 'bold',
+                fill: '#00ffff', 
+                opacity: 0.75,
+                transform: `rotate(0, ${plusX}, ${plusY})` // Rotate if needed
+            });
+            plusText.textContent = plusVal;
+            parent.appendChild(plusText);
+
+            // Render - modifier text (Goldenrod, Bold)
+            const minusText = createSVG('text', {
+                x: minusX,
+                y: minusY,
+                'text-anchor': 'middle',
+                'dominant-baseline': 'central',
+                'font-size': fontSize, 
+                'font-weight': 'bold',
+                fill: '#daa520', 
+                opacity: 0.75,
+                transform: `rotate(0, ${minusX}, ${minusY})` // Rotate if needed
+            });
+            minusText.textContent = minusVal;
+            parent.appendChild(minusText);
+
+            // City star rating in upper-left quadrant center
+            if(hasCity){
+                const rating = (cellCityRating && cellCityRating[index]) ? cellCityRating[index] : 1;
+                const starX = cx - CELL_SIZE * 0.25;
+                const starY = cy - CELL_SIZE * 0.23; 
+                const outer = 13; 
+                for(let s=0;s<rating;s++){
+                    const offsetX = s * (outer * 2.2);
+                    createStar(parent, starX - offsetX, starY, outer, '#bffe3c');
+                }
+            }
+        }
+    }
+}
+
+  // Main runner
+  function runOnce(settings){
+    clearSVG();
+    const spacing = 420; const cols = (settings.columns>0)?settings.columns:Math.ceil(Math.sqrt(settings.count));
+    const rows = Math.ceil(settings.count / cols);
+    const width = cols * spacing;
+    const height = rows * spacing;
+
+    canvas.setAttribute(
+        'viewBox',
+        `150 150 ${width} ${height}`
+    );
+    const defs = ensureDefs();
+
+    const mapClipId = 'mapClip_' + Math.random().toString(36).slice(2);
+
+    const mapClip = createSVG('clipPath', {
+        id: mapClipId
+    });
+
+    const mapRect = createSVG('rect', {
+        x: 150,
+        y: 150,
+        width: width,
+        height: height
+    });
+
+    mapClip.appendChild(mapRect);
+    defs.appendChild(mapClip);
+    // background
+    if(settings.doBG){ const bg=createSVG('rect',{x:0,y:0,width:width,height:height,fill:'#000',opacity:0
+}); canvas.appendChild(bg);}    
+
+    // starfield should be behind planets but above the background
+    if(settings.doStars){
+
+        const starG = createSVG('g');
+
+        starG.setAttribute(
+            'clip-path',
+            `url(#${mapClipId})`
+        );
+
+        canvas.appendChild(starG);
+
+        for(let s=0; s<settings.starCount; s++){
+
+            const x = rand(150, 150 + width);
+            const y = rand(150, 150 + height);
+            const sz = rand(0.5, 3);
+
+            const star = createSVG('circle', {
+                cx: x,
+                cy: y,
+                r: sz,
+                fill: '#fff',
+                opacity: rand(0.6, 1)
+            });
+
+            starG.appendChild(star);
+        }
+    }
+const master = createSVG('g');
+master.setAttribute('clip-path', `url(#${mapClipId})`);
+canvas.appendChild(master);
+    const cellTypes = [];
+    const cellHasCity = [];
+    const cellCityRating = [];
+    for(let i=0;i<settings.count;i++){
+      const col = i % cols; const row = Math.floor(i/cols);
+      const cx = 150 + col*spacing + spacing*0.5; const cy = 150 + row*spacing + spacing*0.5;
+      const roll=Math.random();
+      let obj=null; let typeTag='planet';
+      const nebulaChance = settings.nebula/100; const fieldChance=settings.fields/100; const gasChance=settings.gas/100; const blackHoleChance=settings.blackholes/100;
+      let cumulative=0;
+      if(settings.doNebula && roll < (cumulative += nebulaChance)) { obj = createNebula(master,cx,cy, rand(80,140)); typeTag='nebula'; cellHasCity.push(false); cellCityRating.push(0); }
+      else if(settings.doFields && roll < (cumulative += fieldChance)) { obj = createAsteroidField(master,cx,cy, rand(60,110)); typeTag='asteroid'; cellHasCity.push(false); cellCityRating.push(0); }
+      else if(settings.doGas && roll < (cumulative += gasChance)) { obj = createGasGiant(master,cx,cy, rand(50,90), {shadow:settings.shadow}); typeTag='gasgiant'; cellHasCity.push(false); cellCityRating.push(0); }
+      else if(settings.doBlackHoles && roll < (cumulative += blackHoleChance)) { obj = createBlackHole(master,cx,cy, rand(80,160)); typeTag='blackhole'; cellHasCity.push(false); cellCityRating.push(0); }
+      else { 
+      const res = createPlanet(master,cx,cy, rand(50,90), settings); typeTag='planet'; 
+      let hasCity = res.hasCity === true;
+        if (hasCity && Math.random() > 0.70) { // global fail chance - higher value means more survive
+            hasCity = false;
+        }
+        
+        cellHasCity.push(hasCity);
+        cellCityRating.push(hasCity ? (res.cityRating || 1) : 0);
+      }
+      cellTypes.push(typeTag);
+    }
+
+    if(settings.doGrid){ const grid = addGlobalGrid(canvas,cols,rows); addCellStats(canvas,cols,rows,cellTypes,cellHasCity,cellCityRating); }
+
+// scale master group
+const userScale = settings.scale||100; 
+master.setAttribute('transform',`scale(${userScale/100})`);
+
+// Save the finished custom SVG
+localStorage.setItem("customBoardSVG", canvas.outerHTML);
+}
+
+  // UI wiring
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////////// -- Explore space on a bit of glass
+////////////// ---- Starjourn & Starjourn: Infinite Copyright 6/21/2026 SPM v1.2.1
+////////////// ---- Do not redistribute
+
+</script>
+
+</body>
+</html>
