@@ -1110,7 +1110,7 @@ function makeDraggable(el){
 const muteBtn = document.getElementById("audioMuteBtn");
 
 if (muteBtn) {
-    // Standard click listener
+   
     muteBtn.addEventListener("click", (e) => {
         e.stopPropagation(); 
         
@@ -1188,28 +1188,27 @@ function loadBoard(index) {
     state.currentBoard = index;
 
     const boardElement = document.getElementById("board");
-    const canvasSvg = document.getElementById("canvas");
 
     if (BOARDS[index] === "GENERATED") {
 
-    boardElement.style.backgroundImage = "none";
+        boardElement.style.backgroundImage = "none";
 
-    canvasSvg.style.display = "block";
+        const canvasSvg = document.getElementById("canvas");
 
-    const savedSVG = localStorage.getItem("customBoardSVG");
+        if (canvasSvg) {
+            canvasSvg.style.display = "block";
+        }
 
-    if (savedSVG) {
-        canvasSvg.outerHTML = savedSVG;
+        loadCustomBoardSVG();
+
     } else {
-       
-        generateStarjournMap();
-    }
 
-} else {
-        
-        canvasSvg.style.display = "none";
+        const canvasSvg = document.getElementById("canvas");
 
-        
+        if (canvasSvg) {
+            canvasSvg.style.display = "none";
+        }
+
         boardElement.style.backgroundImage =
             'url("' + BOARDS[index] + '")';
     }
@@ -1224,20 +1223,46 @@ function loadBoard(index) {
 }
 
 
+function saveCustomBoardSVG() {
+    const canvasSvg = document.getElementById("canvas");
+
+    if (!canvasSvg) return;
+
+    localStorage.setItem(
+        "customBoardSVG",
+        canvasSvg.outerHTML
+    );
+}
+
+
+function loadCustomBoardSVG() {
+    const savedSVG = localStorage.getItem("customBoardSVG");
+
+    if (!savedSVG) {
+        generateStarjournMap();
+        return;
+    }
+
+    const canvasSvg = document.getElementById("canvas");
+
+    if (!canvasSvg) return;
+
+    canvasSvg.outerHTML = savedSVG;
+}
+
+
+
 function generateStarjournMap() {
 
     const settings = {
 
-        
         count: 35,
         columns: 7,
         scale: 100,
 
-        
         doGrid: true,
         doBG: true,
 
-        
         land: true,
         city: true,
         poles: true,
@@ -1248,7 +1273,6 @@ function generateStarjournMap() {
         rings: true,
         shadow: true,
 
-        
         doStars: true,
         starCount: 1200,
 
@@ -1266,9 +1290,9 @@ function generateStarjournMap() {
     };
 
     runOnce(settings);
+
+    saveCustomBoardSVG();
 }
-
-
 
 
 const EVENTS = [
@@ -1846,10 +1870,11 @@ if(state.currentEvent !== null){
 
 document.getElementById("generate").addEventListener("click", function() {
 
-    
-    if (BOARDS[state.currentBoard] === "GENERATED") {
-        generateStarjournMap();
+    if (BOARDS[state.currentBoard] !== "GENERATED") {
+        return;
     }
+
+    generateStarjournMap();
 
 });
 
@@ -1907,55 +1932,12 @@ document
 document.getElementById("resetBtn").addEventListener("click", resetGame);
 
 function resetGame() {
-    
-    localStorage.clear(); 
-
-    
-    location.reload(); 
 
 
-    state.turn = 0;
-    state.playerPosition = 0; 
-    state.tokens = 0;         
-    
-    
-    updateTurnCounter();
-    if (typeof updatePlayerPositionUI === "function") {
-        updatePlayerPositionUI(); 
-    }
-    if (typeof updateTokenDisplay === "function") {
-        updateTokenDisplay();     
-    }
+    localStorage.removeItem("boardTrackerState");
 
-    
-    state.d6a = 1;
-    state.d6b = 1;
-    state.d20a = 3;
-    state.d20b = 0;
-    state.d6Modifier = 0;
-    state.d20Modifier = 0;
-    
-    document.getElementById("d6a").textContent = "1";
-    document.getElementById("d6b").textContent = "1";
-    document.getElementById("d6Total").textContent = "2";
-    document.getElementById("d6ModifierDisplay").textContent = "Modifier: 0";
-    document.getElementById("d20a").textContent = "3";
-    document.getElementById("d20b").textContent = "0";
-
-    
-    if (document.getElementById("eventImage")) {
-        document.getElementById("eventImage").src = "https://via.placeholder.com/80";
-    }
-    if (document.getElementById("eventText")) {
-        document.getElementById("eventText").textContent = "Click the event icon to draw an event.";
-    }
-
-
-    if (typeof resetEvents === "function") {
-        resetEvents();
-    }
+    location.reload();
 }
-
 
 
 
@@ -2785,7 +2767,7 @@ const gameAudio = new GameAudioEngine();
 
 
 ////////////// -- Explore space on a bit of glass
-////////////// ---- Starjourn & Starjourn: Infinite Copyright 6/21/2026 SPM v1.3.2
+////////////// ---- Starjourn & Starjourn: Infinite Copyright 6/21/2026 SPM v1.3.3 - separated custom map save from reset game functions
 ////////////// ---- Do not redistribute
 
 </script>
