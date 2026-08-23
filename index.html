@@ -1247,9 +1247,21 @@ function loadCustomBoardSVG() {
 
     if (!canvasSvg) return;
 
-    canvasSvg.outerHTML = savedSVG;
-}
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(savedSVG, "image/svg+xml");
+    const savedCanvas = doc.documentElement;
 
+  
+    for (const attr of Array.from(canvasSvg.attributes)) {
+        canvasSvg.removeAttribute(attr.name);
+    }
+
+    for (const attr of Array.from(savedCanvas.attributes)) {
+        canvasSvg.setAttribute(attr.name, attr.value);
+    }
+
+    canvasSvg.innerHTML = savedCanvas.innerHTML;
+}
 
 
 function generateStarjournMap() {
