@@ -19,11 +19,11 @@ body {
     display: flex;
     height: 100vh;
     width: 100vw;
-    overflow: hidden; /* Stops browser scrolling */
+    overflow: hidden; 
     box-sizing: border-box;
 }
 
-/* Custom Dark Look Scrollbar Engines */
+
 html, * {
     scrollbar-color: #555555 #1e1e1e;
     scrollbar-width: thin;
@@ -47,7 +47,7 @@ html, * {
     background: #777777; 
 }
 
-/* BOARD FRAME - board image inset, div below*/
+
 #boardWrap {
     flex: 1;
     display: flex;
@@ -66,12 +66,12 @@ html, * {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* Aligns content from the top so it doesn't overflow out of view */
+    justify-content: flex-start; 
     height: 100vh;
     
-    /* Allows this middle area to scroll horizontally and vertically */
+    
     overflow: auto;  
-    padding: 20px;               /* Adds frame around map */
+    padding: 20px;              
     box-sizing: border-box;
 }
 
@@ -135,16 +135,16 @@ html, * {
 
 #board {
     position: relative;
-    width: 1085px;               /* Restores absolute fixed width layout grid board imagesize*/ 
-    height: 775px;               /* Restores absolute fixed height layout */
+    width: 1085px;               
+    height: 775px;              
     background-image: url("");
     background-size: cover;
     background-position: center;
     border: 2px solid #555;
     max-width: none; 
     max-height: none; 
-    object-fit: fill;            /* Keeps background tracking stable */
-    flex-shrink: 0;              /* Prevents sidebars from shrinking the grid */
+    object-fit: fill;            
+    flex-shrink: 0;              
 }
 
 
@@ -186,11 +186,11 @@ html, * {
     flex-shrink: 0;              
 }
 
-/* changes to scroll if crushed */
+
 #eventTextWrapper {
     flex: 1;                     
     min-height: 0;               
-    overflow-y: auto;            /* Becomes scrollable if screen gets too short */
+    overflow-y: auto;            
     padding-right: 5px;   
     mask-image:
         linear-gradient(
@@ -208,7 +208,7 @@ html, * {
     word-break: break-word;      
 }
 
-/* Event Title */
+
 evt-title{
     display:block;
     font-size:22px;
@@ -220,7 +220,6 @@ evt-title{
     margin-bottom:16px;
 }
 
-/* Main Effect Text */
 evt-effect{
     display:block;
     font-size:20px;
@@ -229,14 +228,12 @@ evt-effect{
     margin-bottom:20px;
 }
 
-/* Highlighted Rules Text */
 evt-hot{
     color:#efefef;
     font-weight:600;
     font-size:1.08em;
 }
 
-/* Flavor Text */
 evt-lore{
     display:block;
     font-size:15px;
@@ -249,7 +246,6 @@ evt-lore{
 
 }
 
-/* Version Footer */
 #eventFooter {
     flex-shrink: 0;              
     padding-top: 10px;
@@ -467,9 +463,9 @@ button {
 height: 30px;
 
 
-    background-color: #555555; /* Medium dark gray background */
-    color: #c6c6c6;            /* Crisp white text */
-    border: 1px solid #444444; /* Optional: smooth out the border */
+    background-color: #555555; 
+    color: #c6c6c6;           
+    border: 1px solid #444444; 
 
 }
 
@@ -499,27 +495,27 @@ height: 30px;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #040406; /* Deep cosmic dark background */
+  background-color: #040406; 
   z-index: -1;
   overflow: hidden;
 
   background-image: 
-    /* LAYER 1: Deep space soft nebula clouds */
+    
     radial-gradient(ellipse 35% 25% at 200px 220px, rgba(134, 55, 137, 0.11), transparent),
     radial-gradient(ellipse 40% 40% at 380px 350px, rgba(38, 43, 107, 0.14), transparent),
     radial-gradient(ellipse 30% 20% at 220px 150px, rgba(16, 49, 54, 0.1), transparent),
     radial-gradient(ellipse 45% 45% at 280px 270px, rgba(38, 86, 107, 0.12), transparent),
    
-    /* LAYER 2: Fine background space dust / Tiny stars */
+    
     radial-gradient(1px 1px at 70px 80px, rgba(255, 255, 255, 0.8), transparent),
     radial-gradient(2px 2px at 140px 420px, rgba(135, 206, 250, 0.75), transparent), 
     radial-gradient(1.5px 1.5px at 280px 140px, rgba(255, 223, 137, 0.7), transparent),
 
-    /* LAYER 3: Medium and prominent white stars */
+    
     radial-gradient(3px 3px at 450px 250px, #ffffff, transparent),
     radial-gradient(4.5px 4.5px at 180px 450px, rgba(255, 255, 255, 0.95), transparent),
 
-    /* LAYER 4: Asteroid Cluster / Debris field */
+    
     radial-gradient(2px 2px at 320px 280px, #d5d5d5, transparent),
     radial-gradient(3px 4px at 330px 270px, #6e6e6e, transparent),
     radial-gradient(5px 2px at 360px 210px, #525252, transparent),
@@ -648,7 +644,7 @@ height: 30px;
         <h3>Player</h3>
         <div class="reserve" id="playerReserve">
             <div class="token player" id="playerToken"><b>P1</b></div>
-            <div class="token player2" id="playerToken2"><b>P2</b></div> <!-- Added Player 2 -->
+            <div class="token player2" id="playerToken2"><b>P2</b></div> 
         </div>
     </div>
 
@@ -840,7 +836,7 @@ FOR MORE INFO
     <div id="boardAndHeader">
         <div id="board-name">Targeting Sector...</div>
         <div id="board">
-            <!-- Added viewBox="0 0 800 450" to give your canvas a clear grid system -->
+            
             <svg id="canvas" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid meet" xmlns="http://w3.org"></svg>
         </div>
     </div>
@@ -891,7 +887,7 @@ FOR MORE INFO
     <div id="eventFooter" style="display: flex; align-items: center; justify-content: center; font-size: 8px;">
     STARJOURN © SPM 2026 • v1.3.2
 
-    <!-- UPDATED: SHRUNK AND ALIGNED AUDIO TOGGLE BUTTON -->
+    
     <button id="audioMuteBtn" style="
         display: inline-flex;
         align-items: center;
@@ -1109,10 +1105,7 @@ function makeDraggable(el){
     });
 }
 
-// =================================================================
-// --- GLOBAL INTERFACE ACTION CONTROLLER FOR AUDIO BUTTON ---
-// =================================================================
-// This now sits safely OUTSIDE of makeDraggable!
+
 
 const muteBtn = document.getElementById("audioMuteBtn");
 
@@ -1121,7 +1114,7 @@ if (muteBtn) {
     muteBtn.addEventListener("click", (e) => {
         e.stopPropagation(); 
         
-        // Safety check to unlock browser audio restrictions if needed
+      
         if (typeof gameAudio !== "undefined" && gameAudio.context && gameAudio.context.state === "suspended") {
             gameAudio.context.resume();
         }
@@ -1131,7 +1124,7 @@ if (muteBtn) {
         }
     });
 
-    // Mobile touch listener
+   
     muteBtn.addEventListener("touchstart", (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -1199,27 +1192,24 @@ function loadBoard(index) {
 
     if (BOARDS[index] === "GENERATED") {
 
-    // Remove static board image
     boardElement.style.backgroundImage = "none";
 
-    // Show generated SVG
     canvasSvg.style.display = "block";
 
-    // Restore saved custom SVG if one exists
     const savedSVG = localStorage.getItem("customBoardSVG");
 
     if (savedSVG) {
         canvasSvg.outerHTML = savedSVG;
     } else {
-        // No saved SVG yet — generate one
+       
         generateStarjournMap();
     }
 
 } else {
-        // Hide generated SVG
+        
         canvasSvg.style.display = "none";
 
-        // Show static board
+        
         boardElement.style.backgroundImage =
             'url("' + BOARDS[index] + '")';
     }
@@ -1233,21 +1223,21 @@ function loadBoard(index) {
     saveState();
 }
 
-// Fixed visual generator function using clear coordinate targets
+
 function generateStarjournMap() {
 
     const settings = {
 
-        // Main map
+        
         count: 35,
         columns: 7,
         scale: 100,
 
-        // Board/grid
+        
         doGrid: true,
         doBG: true,
 
-        // Planet features
+        
         land: true,
         city: true,
         poles: true,
@@ -1258,7 +1248,7 @@ function generateStarjournMap() {
         rings: true,
         shadow: true,
 
-        // Space features
+        
         doStars: true,
         starCount: 1200,
 
@@ -1617,10 +1607,10 @@ function setupDice(){
 
         const d20 = document.getElementById(id);
 
-        // Helper function to update the d20 value safely
+        
         function updateD20(change) {
             let val = parseInt(d20.textContent);
-            if (isNaN(val)) val = 0; // Fallback if text is empty or not a number
+            if (isNaN(val)) val = 0; 
 
             val += change;
 
@@ -1632,22 +1622,22 @@ function setupDice(){
             saveState();
         }
 
-        // Existing mousewheel functionality
+        
         d20.addEventListener("wheel", e=>{
             e.preventDefault();
-            if(e.deltaY < 0) updateD20(1);  // Wheel up increases
-            else updateD20(-1);             // Wheel down decreases
+            if(e.deltaY < 0) updateD20(1);  
+            else updateD20(-1);             
         });
 
-        // Left click to increase (+1)
+        
         d20.addEventListener("click", e => {
             e.preventDefault();
             updateD20(1);
         });
 
-        // Right click to decrease (-1)
+        
         d20.addEventListener("contextmenu", e => {
-            e.preventDefault(); // Prevents the browser's right-click menu
+            e.preventDefault(); 
             updateD20(-1);
         });
     });
@@ -1810,7 +1800,7 @@ function updateD20Total(){
 
 
 
-loadState();      /////////////// LOAD STATE KEY
+loadState();      
 
 updateTurnCounter();
 
@@ -1856,7 +1846,7 @@ if(state.currentEvent !== null){
 
 document.getElementById("generate").addEventListener("click", function() {
 
-    // Only generate when the Custom Generated Sector is active
+    
     if (BOARDS[state.currentBoard] === "GENERATED") {
         generateStarjournMap();
     }
@@ -1879,7 +1869,7 @@ document
 .getElementById("d20b")
 .textContent=state.d20b;
 
-// On page load, display the text for the saved board index
+
 document.getElementById("board-name").textContent = BOARD_NAMES[state.currentBoard || 0];
 document.getElementById("boardSelector").value =
     state.currentBoard;
@@ -1994,7 +1984,7 @@ function resetGame() {
 
   function createPolygon(parent,cx,cy,r,sides){ const p = createSVG('polygon',{points:polygonPoints(cx,cy,r,sides,0.25)}); parent.appendChild(p); return p; }
 
-  // draw a 5-point star polygon
+  
   function createStar(parent,x,y,outerR,fill){
     const innerR = outerR * 0.45;
     let pts = [];
@@ -2013,7 +2003,7 @@ function resetGame() {
     return star;
   }
 
-  // Palettes (ported from original JSX)
+  
   const PALETTES = [
     {base:[70,140,220], land:[90,200,150]},
     {base:[220,170,90], land:[200,120,70]},
@@ -2043,27 +2033,27 @@ function resetGame() {
     {base:[255,160,90], land:[255,215,75]}
   ];
 
-  // Ensure a <defs> element exists for gradients
+  
   function ensureDefs(){ let defs = canvas.querySelector('defs'); if(!defs){ defs = createSVG('defs'); canvas.appendChild(defs);} return defs; }
 
-  // Create a rotated linear gradient for darkside shadow
+  
   function makeShadowGradient(id, rotation){ const defs = ensureDefs(); const g = createSVG('linearGradient',{id:id, x1:'0%', y1:'0%', x2:'100%', y2:'0%'}); g.setAttribute('gradientTransform', `rotate(${rotation})`); const s1 = createSVG('stop',{offset:'0%', 'stop-color':'rgba(0,0,0,0)','stop-opacity':'0'}); const s2 = createSVG('stop',{offset:'100%', 'stop-color':'#000','stop-opacity':'1'}); g.appendChild(s1); g.appendChild(s2); defs.appendChild(g); return g; }
 
-  // Apply a darkside shadow ellipse to a parent group at cx,cy with radius r
+  
   function applyDarkside(parent, cx, cy, r, rotation=28, opacity=0.88){ const gid = 'sh' + Math.random().toString(36).slice(2); makeShadowGradient(gid, rotation); const sh = createSVG('ellipse',{cx:cx - r*SHADOW_OFFSET, cy:cy, rx:r, ry:r, fill:`url(#${gid})`, opacity:opacity}); parent.appendChild(sh); return sh; }
 
-  // Planet (simplified port)
+  
   function createPlanet(parent,cx,cy,r,opts){
     const g = createSVG('g'); parent.appendChild(g);
     let hasCity = false;
     let cityRating = 0;
-    // choose palette
+    
     const palette = PALETTES[randInt(0, PALETTES.length-1)];
-    // base
+    
     const baseColor = color(palette.base[0], palette.base[1], palette.base[2]);
     const base = createSVG('circle',{cx:cx,cy:cy,r:r,fill:baseColor}); g.appendChild(base);
 
-    // land
+    
     const landZones = [];
     if(opts.land){
       const landGroup = createSVG('g'); g.appendChild(landGroup);
@@ -2082,7 +2072,7 @@ function resetGame() {
       }
     }
 
-    // mountains
+    
     if(opts.mountains && landZones.length){
       const mt = createSVG('g'); g.appendChild(mt);
       let mtCount = randInt(10,20);
@@ -2098,11 +2088,10 @@ function resetGame() {
       }
     }
 
-    // clouds
+    
     if(opts.clouds){ const clouds = createSVG('g'); g.appendChild(clouds); for(let i=0;i<randInt(0,12);i++){ const w=rand(20,60),h=rand(8,28); const e = createSVG('ellipse',{cx:cx+rand(-r*0.3,r*0.3),cy:cy+rand(-r*0.65,r*0.65),rx:w,ry:h,fill:'#fff',opacity:rand(0.08,0.22)}); clouds.appendChild(e);} }
 
-    // poles (glacial caps) 
-    // when enabled, only 66% of planets to have 
+
     if(opts.poles && Math.random() < 0.6666667){
       const poleContent = createSVG('g');
       const poleGroup = createSVG('g');
@@ -2147,7 +2136,7 @@ function resetGame() {
       addPole(cy + poleOffset);
       addPole(cy - (poleOffset * 1.052));
 
-      // rotate ~28deg counterclockwise
+    
       const rot = -28;
       poleContent.setAttribute('transform', `rotate(${rot} ${cx} ${cy})`);
 
@@ -2160,10 +2149,9 @@ function resetGame() {
       g.appendChild(poleGroup);
     }
 
-    // shadow (gradient darkside) for planet
+   
     if(opts.shadow){ applyDarkside(g, cx, cy, r*(1.02), 28, 0.88); }
 
-    // rings: create horizontal ellipses, duplicate back+front, clip front with rectangle whose top aligns to equator, then rotate both groups together
     if(opts.rings && Math.random()<0.4){
       const ringsBack = createSVG('g');
       ringsBack.setAttribute('id','RINGS_BACK');
@@ -2181,7 +2169,6 @@ function resetGame() {
         defs.appendChild(lg);
       }
 
-      // pick a single rotation for the whole ring collection (small variation around horizontal)
       const rot = rand(40,60);
 
       let maxRx = 0; let maxRy = 0;
@@ -2192,46 +2179,37 @@ function resetGame() {
         const ry = r * (1.6 + step);
         if(rx > maxRx) maxRx = rx;
         if(ry > maxRy) maxRy = ry;
-        // ellipses oriented along horizontal equator (no per-ring rotation)
         const el = createSVG('ellipse',{cx:cx, cy:cy, rx:rx, ry:ry, fill:'none', stroke:`url(#${gName})`, 'stroke-width': rand(0.55, 8.5), opacity:1});
         ringsBack.appendChild(el);
       }
 
-      // place back rings behind the planet base
-      // apply rotation to the back group
+
       ringsBack.setAttribute('transform', `rotate(${rot} ${cx} ${cy})`);
       g.insertBefore(ringsBack, base);
 
-      // duplicate front rings and clip with rectangle that bisects the group along its long axis
       const ringsFront = ringsBack.cloneNode(true);
       ringsFront.setAttribute('id','RINGS_CLIP_GROUP');
       const cpId = 'ringclip_' + Math.random().toString(36).slice(2);
       const cp = createSVG('clipPath',{id:cpId});
       const groupWidth = maxRx * 6;
       const groupHeight = maxRy * 1.5;
-      // create a rectangle whose top is at the planet equator (cy), full group width, half the height;
-      // rotate the rect around the planet center so it aligns with the rings' major axis
+
       const rect = createSVG('rect',{x: cx - groupWidth/2, y: cy, width: groupWidth, height: groupHeight/2});
       rect.setAttribute('transform', `rotate(${rot + 220} ${cx} ${cy})`);
       cp.appendChild(rect);
       defs.appendChild(cp);
       ringsFront.setAttribute('clip-path', `url(#${cpId})`);
-      // apply same rotation to front group (clone already has transform from clone; reset then set)
       ringsFront.setAttribute('transform', `rotate(${rot} ${cx} ${cy})`);
       g.appendChild(ringsFront);
     }
 
-    // moons (inherit planet palette colors)
     if(opts.moons){ const moons = createSVG('g'); g.appendChild(moons); const inherit = rand(0.55,0.86); for(let i=0;i<randInt(0,4);i++){ const angle=rand(0,Math.PI*2),dist=r+rand(40,100),mx=cx+Math.cos(angle)*dist,my=cy+Math.sin(angle)*dist,mr=rand(6,15); const baseGray = randInt(150,240); const rCol = Math.min(255, baseGray * (1 - inherit) + palette.land[0] * inherit); const gCol = Math.min(255, baseGray * (1 - inherit) + palette.land[1] * inherit); const bCol = Math.min(255, baseGray * (1 - inherit) + palette.land[2] * inherit); const m = createSVG('circle',{cx:mx,cy:my,r:mr,fill:color(rCol,gCol,bCol),opacity:1}); moons.appendChild(m); if(opts.shadow){ applyDarkside(moons, mx, my, mr, 28, 0.88); } } }
 
-    // asteroids (grayscale)
     if(opts.asteroids){ const aG=createSVG('g'); g.appendChild(aG); for(let i=0;i<randInt(0,28);i++){ const angle=rand(0,Math.PI*2),dist=r+rand(30,120),ax=cx+Math.cos(angle)*dist,ay=cy+Math.sin(angle)*dist; const rock=createPolygon(aG,ax,ay,rand(2,8),randInt(4,7)); const gVal = randInt(80,180); rock.setAttribute('fill',color(gVal,gVal,gVal)); rock.setAttribute('opacity',rand(0.6,1)); }}
 
-// city lights
 if(opts.city && landZones.length && Math.random() < 0.6){
 
-  // fail chance, city frequency
-  if(Math.random() <= 0.50){ // 50% chance city fails to generate in uncharted space
+  if(Math.random() <= 0.50){ 
 
     const cityG = createSVG('g');
     g.appendChild(cityG);
@@ -2274,7 +2252,6 @@ if(opts.city && landZones.length && Math.random() < 0.6){
       cityG.appendChild(dot);
     }
 
-    // City survived, so give it a rating
     hasCity = true;
     cityRating = randInt(1,3);
   }
@@ -2286,10 +2263,8 @@ if(opts.city && landZones.length && Math.random() < 0.6){
   function createAsteroidField(parent,cx,cy,r){ const g=createSVG('g'); parent.appendChild(g); for(let i=0;i<randInt(40,150);i++){ const angle=rand(0,Math.PI*2),dist=Math.pow(Math.random(),1.75)*r*2.8,x=cx+Math.cos(angle)*dist,y=cy+Math.sin(angle)*dist; const rock=createPolygon(g,x,y,rand(2,10),randInt(4,8)); const gVal = randInt(90,180); rock.setAttribute('fill',color(gVal,gVal,gVal)); rock.setAttribute('opacity',rand(0.6,1)); } return g }
 
   function createNebula(parent,cx,cy,r){ const g=createSVG('g'); parent.appendChild(g); const baseR=randInt(120,255), baseG=randInt(50,200), baseB=randInt(120,255); for(let l=0;l<randInt(3,6);l++){ for(let i=0;i<randInt(12,25);i++){ const angle=rand(0,Math.PI*2),dist=Math.pow(Math.random(),0.7)*r*2.5,x=cx+Math.cos(angle)*dist,y=cy+Math.sin(angle)*dist,w=rand(80,200),h=rand(60,160); const e=createSVG('ellipse',{cx:x,cy:y,rx:w,ry:h,fill:color(Math.min(255,baseR+rand(-50,50)),Math.min(255,baseG+rand(-50,50)),Math.min(255,baseB+rand(-50,50))),opacity:rand(0.04,0.12)}); e.setAttribute('transform',`rotate(${rand(-30,30)} ${x} ${y})`); g.appendChild(e);} }
-    // core slightly more visible
     const coreR=r*rand(0.2,0.9); const core=createSVG('circle',{cx:cx,cy:cy,r:coreR,fill:color(Math.min(255,baseR+60),Math.min(255,baseG+60),Math.min(255,baseB+60)),opacity:rand(0.01,0.05)}); g.appendChild(core);
     for(let s=0;s<randInt(10,45);s++){ const sz=rand(2,6.5); const star=createSVG('circle',{cx:cx+rand(-r,r),cy:cy+rand(-r,r),r:sz,fill:color(Math.min(255,baseR+80),Math.min(255,baseG+80),Math.min(255,baseB+80)),opacity:rand(0.6,1)}); g.appendChild(star);} 
-    // overall nebula transparency slightly increased
     g.setAttribute('opacity', rand(0.18,0.36));
     return g }
 
@@ -2297,11 +2272,9 @@ if(opts.city && landZones.length && Math.random() < 0.6){
   function createBlackHole(parent, cx, cy, r) {
     const g = createSVG('g'); parent.appendChild(g);
 
-    // 1. CHOOSE A SMALLER SIZE FOR THE CORE AND ACCRETION LAYER
-    // Adjust the 0.55 factor to change how tiny the actual black circle is
+ 
     const coreR = r * 0.55; 
 
-    // Create the stepping dark background layers using the new core size
     for (let i = 0; i < 9; i++) { 
         const t = i / 9; 
         const size = coreR * (1 + t * 0.5); 
@@ -2309,12 +2282,10 @@ if(opts.city && landZones.length && Math.random() < 0.6){
         g.appendChild(s); 
     }    
     
-    // Choose a stroke color and a slightly lighter aura color
     const strokeR = randInt(100, 255), strokeG = randInt(100, 255), strokeB = randInt(100, 255);
     const auraR = Math.min(255, strokeR + 60), auraG = Math.min(255, strokeG + 60), auraB = Math.min(255, strokeB + 60);
 
     const defs = ensureDefs();
-    // Per-instance aura gradient
     const auraId = 'bhAura_' + Math.random().toString(36).slice(2);
     const rg = createSVG('radialGradient', { id: auraId, cx: '50%', cy: '50%', r: '50%', fx: '50%', fy: '50%' });
     rg.appendChild(createSVG('stop', { offset: '0%', 'stop-color': color(auraR, auraG, auraB), 'stop-opacity': '0.5' }));
@@ -2322,7 +2293,6 @@ if(opts.city && landZones.length && Math.random() < 0.6){
     rg.appendChild(createSVG('stop', { offset: '100%', 'stop-color': color(auraR, auraG, auraB), 'stop-opacity': '0' }));
     defs.appendChild(rg);
 
-    // Create/ensure a subtle roughen filter (turbulence + displacement)
     if (!defs.querySelector('#roughen')) {
         const f = createSVG('filter', { id: 'roughen', x: '-50%', y: '-50%', width: '200%', height: '200%' });
         const turb = createSVG('feTurbulence', { type: 'fractalNoise', baseFrequency: '0.6', numOctaves: '2', seed: Math.floor(Math.random() * 1000) });
@@ -2330,7 +2300,6 @@ if(opts.city && landZones.length && Math.random() < 0.6){
         f.appendChild(turb); f.appendChild(disp); defs.appendChild(f);
     }
 
-    // 2. THE AURAS (These still use the original 'r' to stretch far across the numbers)
     const auraRot = rand(-42.5, 12.5);
     const aura1 = createSVG('ellipse', { cx: cx, cy: cy, rx: r * 2.6, ry: r * 1.3, fill: `url(#${auraId})`, opacity: 0.9 });
     aura1.setAttribute('transform', `rotate(${auraRot} ${cx} ${cy})`);
@@ -2340,7 +2309,6 @@ if(opts.city && landZones.length && Math.random() < 0.6){
     aura2.setAttribute('transform', `rotate(${90 + auraRot} ${cx} ${cy})`);
     aura2.setAttribute('filter', 'url(#roughen)'); g.appendChild(aura2);
 
-    // 3. MAIN CORE (This now uses the new smaller coreR size)
     const core = createSVG('circle', { cx: cx, cy: cy, r: coreR, fill: '#000', stroke: color(strokeR, strokeG, strokeB), 'stroke-width': 2.5 }); 
     g.appendChild(core); 
     
@@ -2368,7 +2336,6 @@ if(opts.city && landZones.length && Math.random() < 0.6){
     const bandGroup=createSVG('g'); 
     bandGroup.setAttribute('clip-path',`url(#${cid})`);
     
-    // Planet Bands
     for(let i=0;i<randInt(24,40);i++){ 
         const t=i/(randInt(24,40)-1); 
         const lat=(t-0.5)*2; 
@@ -2467,8 +2434,7 @@ for(let r=0; r<rows; r++){
         const type = cellTypes ? cellTypes[index] : "planet";
         const hasCity = cellHasCity ? cellHasCity[index] : false;
         
-        // --- FIXED: RESPECT CELL-TYPE RANGES WITH NO REPEATS ---
-        // 1. Get the min and max for this specific cell type
+
         let min, max;
         if (type === "planet") { min = 3; max = 9; }
         else if (type === "asteroid") { min = 5; max = 11; }
@@ -2477,13 +2443,11 @@ for(let r=0; r<rows; r++){
         else if (type === "blackhole") { min = 1; max = 4; }
         else { min = 1; max = 10; }
 
-        // 2. Dynamically fill the pool with numbers between min and max
         const pool = [];
         for (let i = min; i <= max; i++) {
             pool.push(i);
         }
 
-        // 3. Fisher-Yates Shuffle (scramble the pool)
         for (let i = pool.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             const temp = pool[i];
@@ -2491,9 +2455,8 @@ for(let r=0; r<rows; r++){
             pool[j] = temp;
         }
 
-        // 4. Deal out the top 4 scrambled numbers
         const rolls = [pool[0], pool[1], pool[2], pool[3]];
-        // -------------------------------------------------------
+        
 
         const fontSize=48;
         const white='#ffffff';
@@ -2609,7 +2572,7 @@ for(let r=0; r<rows; r++){
     if(settings.doBG){ const bg=createSVG('rect',{x:0,y:0,width:width,height:height,fill:'#000',opacity:0
 }); canvas.appendChild(bg);}    
 
-    // starfield should be behind planets but above the background
+    // starfield 
     if(settings.doStars){
 
         const starG = createSVG('g');
@@ -2668,11 +2631,9 @@ canvas.appendChild(master);
 
     if(settings.doGrid){ const grid = addGlobalGrid(canvas,cols,rows); addCellStats(canvas,cols,rows,cellTypes,cellHasCity,cellCityRating); }
 
-// scale master group
 const userScale = settings.scale||100; 
 master.setAttribute('transform',`scale(${userScale/100})`);
 
-// Save the finished custom SVG
 localStorage.setItem("customBoardSVG", canvas.outerHTML);
 }
 class GameAudioEngine {
@@ -2747,27 +2708,22 @@ class GameAudioEngine {
             this.masterVolume.gain.linearRampToValueAtTime(0.0, now + 0.1);
             this.updateMuteIcon(true);
         } else {
-            // --- UPDATED: SET MASTER VOLUME CAP TO 0.66 ---
             this.masterVolume.gain.linearRampToValueAtTime(0.66, now + 0.1);
             this.updateMuteIcon(false);
         }
     }
 
-    // --- FIX: ULTRA-RELIABLE ICON REDRAW SYSTEM ---
     updateMuteIcon(isMuted) {
         const svg = document.getElementById("muteIconSvg");
         if (!svg) return;
 
-        // Force a total string rewrite inside the container box to guarantee redraw
         if (isMuted) {
-            // Speaker base with an X
             svg.innerHTML = `
                 <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
                 <line x1="22" y1="9" x2="16" y2="15"></line>
                 <line x1="16" y1="9" x2="22" y2="15"></line>
             `;
         } else {
-            // Speaker base with 2 wave lines
             svg.innerHTML = `
                 <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
                 <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
@@ -2801,7 +2757,6 @@ class GameAudioEngine {
                 osc.type = "sine"; 
                 osc.frequency.setValueAtTime(melodyFreq, now);
                 
-                // --- UPDATED: PLUCK SOFTNESS VOLUME CHANGED TO 0.04 ---
                 gainNode.gain.setValueAtTime(0, now);
                 gainNode.gain.linearRampToValueAtTime(0.04, now + 0.08); 
                 gainNode.gain.exponentialRampToValueAtTime(0.001, now + 1.2); 
